@@ -7,7 +7,7 @@ public struct LaunchRequest {
 public struct Request {
     public var requestId: String
     public var timestamp: Date
-    public var locale: String
+    public var locale: Locale
 }
 
 public struct IntentRequest {

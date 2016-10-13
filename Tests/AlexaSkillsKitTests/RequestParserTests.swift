@@ -7,6 +7,14 @@ func createFilePath(for fileName: String) -> URL {
         .appendingPathComponent(fileName)
 }
 
+func createDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) -> Date {
+    let components = DateComponents(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+    var gregorian = Calendar(identifier: .gregorian)
+    gregorian.timeZone = TimeZone(abbreviation: "UTC")!
+    let date = gregorian.date(from: components)
+    return date!
+}
+
 class RequestParserTests: XCTestCase {
     static let allTests = [
         ("testLaunchRequest", testLaunchRequest)
@@ -14,8 +22,14 @@ class RequestParserTests: XCTestCase {
     
     func testLaunchRequest() throws {
         let parser = try RequestParser(contentsOf: createFilePath(for: "launchRequest.json"))
+        
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .launch)
+        
+        let launchRequest = parser.parseLaunchRequest()
+        XCTAssertEqual(launchRequest?.request.locale, Locale(identifier: "string"))
+        XCTAssertEqual(launchRequest?.request.timestamp, createDate(year: 2015, month: 5, day: 13, hour: 12, minute: 34, second: 56))
+        XCTAssertEqual(launchRequest?.request.requestId, "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000")
     }
     
     func testIntentRequest() throws {
