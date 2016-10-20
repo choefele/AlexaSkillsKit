@@ -47,7 +47,30 @@ public class RequestParser {
         }
     }
     
-    class func dateFromISOString(string: String) -> Date? {
+    public func parseLaunchRequest() -> LaunchRequest? {
+        guard let jsonEnvelope = json as? [String: Any],
+            let request = RequestParser.parseRequest(jsonEnvelope) else {
+                
+            return nil
+        }
+        
+        return LaunchRequest(request: request)
+    }
+    
+    public func parseIntentRequest() -> IntentRequest? {
+        guard let jsonEnvelope = json as? [String: Any],
+            let request = RequestParser.parseRequest(jsonEnvelope) else {
+                
+                return nil
+        }
+        
+        let intent = Intent(name: "", slots: [:])
+        return IntentRequest(request: request, intent: intent)
+    }
+}
+
+extension RequestParser {
+    class func dateFromISOString(_ string: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
@@ -56,25 +79,15 @@ public class RequestParser {
         return dateFormatter.date(from: string)
     }
     
-    class func parseRequest(_ jsonRequest: [String: Any]) -> Request? {
-        guard let requestId = jsonRequest["requestId"] as? String,
+    class func parseRequest(_ jsonEnvelope: [String: Any]) -> Request? {
+        guard let jsonRequest = jsonEnvelope["request"] as? [String: Any],
+            let requestId = jsonRequest["requestId"] as? String,
             let timestampString = jsonRequest["timestamp"] as? String,
-            let timestamp = RequestParser.dateFromISOString(string: timestampString),
+            let timestamp = RequestParser.dateFromISOString(timestampString),
             let localeString = jsonRequest["locale"] as? String else {
-            return nil
+                return nil
         }
         
         return Request(requestId: requestId, timestamp: timestamp, locale: Locale(identifier: localeString))
-    }
-    
-    public func parseLaunchRequest() -> LaunchRequest? {
-        guard let jsonEnvelope = json as? [String: Any],
-            let jsonRequest = jsonEnvelope["request"] as? [String: Any],
-            let request = RequestParser.parseRequest(jsonRequest) else {
-                
-            return nil
-        }
-        
-        return LaunchRequest(request: request)
     }
 }

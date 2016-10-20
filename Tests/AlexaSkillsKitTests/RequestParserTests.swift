@@ -36,6 +36,13 @@ class RequestParserTests: XCTestCase {
         let parser = try RequestParser(contentsOf: createFilePath(for: "intentRequest.json"))
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .intent)
+
+        let intentRequest = parser.parseIntentRequest()
+        XCTAssertEqual(intentRequest?.request.locale, Locale(identifier: "string"))
+        XCTAssertEqual(intentRequest?.request.timestamp, createDate(year: 2015, month: 5, day: 13, hour: 12, minute: 34, second: 56))
+        XCTAssertEqual(intentRequest?.request.requestId, "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000")
+        
+        // intent
     }
     
     func testSessionEndedRequest() throws {
