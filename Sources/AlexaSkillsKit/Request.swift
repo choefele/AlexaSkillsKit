@@ -20,7 +20,16 @@ public struct Intent {
     public var slots: [String: Slot]
 }
 
-public struct Slot {
+public struct Slot: Equatable {
+    public init(name: String, value: String? = nil) {
+        self.name = name
+        self.value = value
+    }
+    
+    public static func ==(lhs: Slot, rhs: Slot) -> Bool {
+        return lhs.name == rhs.name && lhs.value == rhs.value
+    }
+
     public var name: String
     public var value: String?
 }

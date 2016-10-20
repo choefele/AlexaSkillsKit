@@ -35,8 +35,7 @@ public class RequestParser {
         guard let jsonEnvelope = json as? [String: Any],
             let jsonRequest = jsonEnvelope["request"] as? [String: Any],
             let type = jsonRequest["type"] as? String else {
-            
-            return nil
+                return nil
         }
         
         switch type {
@@ -49,9 +48,9 @@ public class RequestParser {
     
     public func parseLaunchRequest() -> LaunchRequest? {
         guard let jsonEnvelope = json as? [String: Any],
-            let request = RequestParser.parseRequest(jsonEnvelope) else {
-                
-            return nil
+            let jsonRequest = jsonEnvelope["request"] as? [String: Any],
+            let request = RequestParser.parseRequest(jsonRequest) else {
+                return nil
         }
         
         return LaunchRequest(request: request)
@@ -59,18 +58,18 @@ public class RequestParser {
     
     public func parseIntentRequest() -> IntentRequest? {
         guard let jsonEnvelope = json as? [String: Any],
-            let request = RequestParser.parseRequest(jsonEnvelope) else {
-                
+            let jsonRequest = jsonEnvelope["request"] as? [String: Any],
+            let request = RequestParser.parseRequest(jsonRequest),
+            let intent = RequestParser.parseIntent(jsonRequest) else {
                 return nil
         }
         
-        let intent = Intent(name: "", slots: [:])
         return IntentRequest(request: request, intent: intent)
     }
 }
 
 extension RequestParser {
-    class func dateFromISOString(_ string: String) -> Date? {
+    class func parseDate(_ string: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
@@ -79,15 +78,40 @@ extension RequestParser {
         return dateFormatter.date(from: string)
     }
     
-    class func parseRequest(_ jsonEnvelope: [String: Any]) -> Request? {
-        guard let jsonRequest = jsonEnvelope["request"] as? [String: Any],
-            let requestId = jsonRequest["requestId"] as? String,
+    class func parseRequest(_ jsonRequest: [String: Any]) -> Request? {
+        guard let requestId = jsonRequest["requestId"] as? String,
             let timestampString = jsonRequest["timestamp"] as? String,
-            let timestamp = RequestParser.dateFromISOString(timestampString),
+            let timestamp = RequestParser.parseDate(timestampString),
             let localeString = jsonRequest["locale"] as? String else {
                 return nil
         }
         
         return Request(requestId: requestId, timestamp: timestamp, locale: Locale(identifier: localeString))
+    }
+    
+    class func parseSlots(_ jsonSlots: [String: Any]) -> [String: Slot] {
+        var slots = [String: Slot]()
+        for (key, json) in jsonSlots {
+            guard let jsonSlot = json as? [String: Any],
+                let name = jsonSlot["name"] as? String else {
+                    continue
+            }
+            
+            let value = jsonSlot["value"] as? String
+            slots[key] = Slot(name: name, value: value)
+        }
+
+        return slots
+    }
+    
+    class func parseIntent(_ jsonRequest: [String: Any]) -> Intent? {
+        guard let jsonIntent = jsonRequest["intent"] as? [String: Any],
+            let name = jsonIntent["name"] as? String,
+            let jsonSlots = jsonIntent["slots"] as? [String: Any] else {
+                return nil
+        }
+        
+        let slots = RequestParser.parseSlots(jsonSlots)
+        return Intent(name: name, slots: slots)
     }
 }
