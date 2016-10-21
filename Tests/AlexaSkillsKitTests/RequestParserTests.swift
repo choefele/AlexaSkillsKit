@@ -51,5 +51,12 @@ class RequestParserTests: XCTestCase {
         let parser = try RequestParser(contentsOf: createFilePath(for: "sessionEndedRequest.json"))
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .sessionEnded)
+        
+        let sessionEndedRequest = parser.parseSessionEndedRequest()
+        XCTAssertEqual(sessionEndedRequest?.request.locale, Locale(identifier: "string"))
+        XCTAssertEqual(sessionEndedRequest?.request.timestamp, createDate(year: 2015, month: 5, day: 13, hour: 12, minute: 34, second: 56))
+        XCTAssertEqual(sessionEndedRequest?.request.requestId, "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000")
+        
+        XCTAssertEqual(sessionEndedRequest?.reason, .userInitiated)
     }
 }

@@ -66,6 +66,17 @@ public class RequestParser {
         
         return IntentRequest(request: request, intent: intent)
     }
+    
+    public func parseSessionEndedRequest() -> SessionEndedRequest? {
+        guard let jsonEnvelope = json as? [String: Any],
+            let jsonRequest = jsonEnvelope["request"] as? [String: Any],
+            let request = RequestParser.parseRequest(jsonRequest),
+            let reason = RequestParser.parseReason(jsonRequest) else {
+                return nil
+        }
+        
+        return SessionEndedRequest(request: request, reason: reason)
+    }
 }
 
 extension RequestParser {
@@ -113,5 +124,41 @@ extension RequestParser {
         
         let slots = RequestParser.parseSlots(jsonSlots)
         return Intent(name: name, slots: slots)
+    }
+    
+    class func parseReason(_ jsonRequest: [String: Any]) -> Reason? {
+        guard let reason = jsonRequest["reason"] as? String else {
+            return nil
+        }
+        
+        switch reason {
+        case "USER_INITIATED": return .userInitiated
+        case "ERROR": return RequestParser.parseError(jsonRequest).map{ .error($0) }
+        case "EXCEEDED_MAX_REPROMPTS": return .exceededMaxReprompts
+        default: return nil
+        }
+    }
+    
+    class func parseError(_ jsonRequest: [String: Any]) -> Error? {
+        guard let jsonError = jsonRequest["error"] as? [String: Any],
+            let type = RequestParser.parseErrorType(jsonError),
+            let message = jsonError["message"] as? String else {
+                return nil
+        }
+        
+        return Error(type: type, message: message)
+    }
+    
+    class func parseErrorType(_ jsonError: [String: Any]) -> ErrorType? {
+        guard let type = jsonError["type"] as? String else {
+            return nil
+        }
+        
+        switch type {
+        case "INVALID_RESPONSE": return .invalidResponse
+        case "DEVICE_COMMUNICATION_ERROR": return .deviceCommunicationError
+        case "INTERNAL_ERROR": return .internalError
+        default: return nil
+        }
     }
 }

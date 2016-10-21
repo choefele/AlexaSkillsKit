@@ -37,18 +37,30 @@ public struct Slot: Equatable {
 public struct SessionEndedRequest {
     public var request: Request
     public var reason: Reason
-    public var error: Error
 }
 
-public enum Reason {
+public enum Reason: Equatable {
     case userInitiated
-    case error
+    case error(Error)
     case exceededMaxReprompts
+    
+    public static func ==(lhs: Reason, rhs: Reason) -> Bool {
+        switch (lhs, rhs) {
+        case (.userInitiated, .userInitiated): return true
+        case (.error(let errorLhs), .error(let errorRhs)) where errorLhs == errorRhs: return true
+        case (.exceededMaxReprompts, .exceededMaxReprompts): return true
+        default: return false
+        }
+    }
 }
 
-public struct Error {
+public struct Error: Equatable {
     public var type: ErrorType
-    public var reason: String
+    public var message: String
+    
+    public static func ==(lhs: Error, rhs: Error) -> Bool {
+        return lhs.type == rhs.type && lhs.message == rhs.message
+    }
 }
 
 public enum ErrorType {
