@@ -40,6 +40,7 @@ public struct SessionEndedRequest {
 }
 
 public enum Reason: Equatable {
+    case unknown
     case userInitiated
     case error(Error)
     case exceededMaxReprompts
@@ -64,6 +65,7 @@ public struct Error: Equatable {
 }
 
 public enum ErrorType {
+    case unknown
     case invalidResponse
     case deviceCommunicationError
     case internalError

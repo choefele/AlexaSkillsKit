@@ -135,7 +135,7 @@ extension RequestParser {
         case "USER_INITIATED": return .userInitiated
         case "ERROR": return RequestParser.parseError(jsonRequest).map{ .error($0) }
         case "EXCEEDED_MAX_REPROMPTS": return .exceededMaxReprompts
-        default: return nil
+        default: return .unknown
         }
     }
     
@@ -158,7 +158,7 @@ extension RequestParser {
         case "INVALID_RESPONSE": return .invalidResponse
         case "DEVICE_COMMUNICATION_ERROR": return .deviceCommunicationError
         case "INTERNAL_ERROR": return .internalError
-        default: return nil
+        default: return .unknown
         }
     }
 }
