@@ -9,21 +9,21 @@
 import Foundation
 
 public class ResponseGenerator {
-    public let response: StandardResponse
+    public let standardResponse: StandardResponse
     
-    public init(response: StandardResponse) {
-        self.response = response
+    public init(standardResponse: StandardResponse) {
+        self.standardResponse = standardResponse
     }
     
     public func generateJson() -> [String: Any] {
         var json: [String: Any] = ["version": "1.0"]
-        json["response"] = ResponseGenerator.generateResponse(response)
+        json["response"] = ResponseGenerator.generateStandardResponse(standardResponse)
         return json
     }
 }
 
 extension ResponseGenerator {
-    class func generateResponse(_ response: StandardResponse) -> [String: Any] {
+    class func generateStandardResponse(_ response: StandardResponse) -> [String: Any] {
         return [:]
     }
 }

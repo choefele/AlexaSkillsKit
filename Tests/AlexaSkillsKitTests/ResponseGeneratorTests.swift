@@ -3,8 +3,8 @@ import XCTest
 
 class ResponseGeneratorTests: XCTestCase {
     func testStandardResponseMinimal() {
-        let response = StandardResponse(shouldEndSession: true)
-        let generator = ResponseGenerator(response: response)
+        let standardResponse = StandardResponse(shouldEndSession: true)
+        let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJson()
         XCTAssertEqual(json["version"] as? String, "1.0")
