@@ -24,7 +24,9 @@ public struct Request: Equatable {
     }
     
     public static func ==(lhs: Request, rhs: Request) -> Bool {
-        return lhs.requestId == rhs.requestId && lhs.timestamp == rhs.timestamp && lhs.locale == rhs.locale
+        return lhs.requestId == rhs.requestId &&
+            lhs.timestamp == rhs.timestamp &&
+            lhs.locale == rhs.locale
     }
 }
 
@@ -80,7 +82,8 @@ public struct SessionEndedRequest: Equatable {
     }
     
     public static func ==(lhs: SessionEndedRequest, rhs: SessionEndedRequest) -> Bool {
-        return lhs.request == rhs.request && lhs.reason == rhs.reason
+        return lhs.request == rhs.request &&
+            lhs.reason == rhs.reason
     }
 }
 
