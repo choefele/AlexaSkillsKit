@@ -12,6 +12,14 @@ public struct StandardResponse {
     public var outputSpeech: OutputSpeech?
     public var card: Card?
     public var reprompt: OutputSpeech?
+    public var shouldEndSession: Bool
+    
+    public init(outputSpeech: OutputSpeech? = nil, card: Card? = nil, reprompt: OutputSpeech? = nil, shouldEndSession: Bool) {
+        self.outputSpeech = outputSpeech
+        self.card = card
+        self.reprompt = reprompt
+        self.shouldEndSession = shouldEndSession
+    }
 }
 
 public enum OutputSpeech {
@@ -22,7 +30,6 @@ public enum OutputSpeech {
 public enum Card {
     case simple(title: String?, content: String?)
     case standard(title: String?, text: String?, image: Image?)
-    case linkAccount
 }
 
 public struct Image {
