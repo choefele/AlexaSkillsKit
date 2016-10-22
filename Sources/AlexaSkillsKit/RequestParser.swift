@@ -1,11 +1,3 @@
-//
-//  RequestParser.swift
-//  AlexaSkillsKit
-//
-//  Created by Claus Höfele on 13.10.16.
-//
-//
-
 import Foundation
 
 public enum RequestType {

@@ -1,11 +1,3 @@
-//
-//  ResponseGenerator.swift
-//  AlexaSkillsKit
-//
-//  Created by Claus Höfele on 22.10.16.
-//
-//
-
 import Foundation
 
 public class ResponseGenerator {

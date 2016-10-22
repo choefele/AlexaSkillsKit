@@ -1,11 +1,3 @@
-//
-//  Response.swift
-//  AlexaSkillsKit
-//
-//  Created by Claus Höfele on 12.10.16.
-//
-//
-
 import Foundation
 
 public struct StandardResponse: Equatable {
