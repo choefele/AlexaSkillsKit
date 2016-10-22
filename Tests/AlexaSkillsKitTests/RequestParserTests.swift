@@ -1,4 +1,4 @@
-@testable import AlexaSkillsKit
+import AlexaSkillsKit
 import XCTest
 
 func createFilePath(for fileName: String) -> URL {
@@ -21,7 +21,7 @@ class RequestParserTests: XCTestCase {
     ]
     
     func testLaunchRequest() throws {
-        let parser = try RequestParser(contentsOf: createFilePath(for: "launchRequest.json"))
+        let parser = try RequestParser(contentsOf: createFilePath(for: "launch_request.json"))
         
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .launch)
@@ -33,7 +33,8 @@ class RequestParserTests: XCTestCase {
     }
     
     func testIntentRequest() throws {
-        let parser = try RequestParser(contentsOf: createFilePath(for: "intentRequest.json"))
+        let parser = try RequestParser(contentsOf: createFilePath(for: "intent_request.json"))
+        
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .intent)
 
@@ -48,7 +49,8 @@ class RequestParserTests: XCTestCase {
     }
     
     func testSessionEndedRequest() throws {
-        let parser = try RequestParser(contentsOf: createFilePath(for: "sessionEndedRequest.json"))
+        let parser = try RequestParser(contentsOf: createFilePath(for: "session_ended_request.json"))
+        
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .sessionEnded)
         
