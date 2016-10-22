@@ -23,7 +23,19 @@ public class ResponseGenerator {
 }
 
 extension ResponseGenerator {
-    class func generateStandardResponse(_ response: StandardResponse) -> [String: Any] {
-        return [:]
+    class func generateStandardResponse(_ standardResponse: StandardResponse) -> [String: Any] {
+        var jsonResponse = [String: Any]()
+        
+        if let outputSpeech = standardResponse.outputSpeech {
+            jsonResponse["outputSpeech"] = ResponseGenerator.generateOutputSpeech(outputSpeech)
+        }
+        
+        return jsonResponse
+    }
+    
+    class func generateOutputSpeech(_ outputSpeech: OutputSpeech) -> [String: Any] {
+        switch outputSpeech {
+        case .plain(let text): return ["type": "PlainText", "text": text]
+        }
     }
 }
