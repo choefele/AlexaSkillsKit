@@ -30,6 +30,11 @@ extension ResponseGenerator {
             jsonResponse["outputSpeech"] = ResponseGenerator.generateOutputSpeech(outputSpeech)
         }
         
+        if let reprompt = standardResponse.reprompt {
+            let jsonOutputSpeech = ["outputSpeech": ResponseGenerator.generateOutputSpeech(reprompt)]
+            jsonResponse["reprompt"] = jsonOutputSpeech
+        }
+        
         return jsonResponse
     }
     
