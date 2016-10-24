@@ -11,8 +11,7 @@ func echo(string: String) -> String {
     let outputSpeech = OutputSpeech.plain(text: "text")
     let standardResponse = StandardResponse(outputSpeech: outputSpeech, shouldEndSession: true)
     let responseGenerator = ResponseGenerator(standardResponse: standardResponse)
-    let json = responseGenerator.generateJson()
-    guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+    guard let jsonData = try? responseGenerator.generateJSON(options: .prettyPrinted) else {
         return "error generating JSON\n"
     }
     
