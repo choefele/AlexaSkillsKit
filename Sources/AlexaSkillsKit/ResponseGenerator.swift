@@ -8,7 +8,7 @@ public class ResponseGenerator {
     }
     
     public func generateJson() -> [String: Any] {
-        var json: [String: Any] = ["version": "1.0"]
+        var json: [String: Any] = ["version": "1.0", "shouldEndSession": standardResponse.shouldEndSession]
         json["response"] = ResponseGenerator.generateStandardResponse(standardResponse)
         return json
     }

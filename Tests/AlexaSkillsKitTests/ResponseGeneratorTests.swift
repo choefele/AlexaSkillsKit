@@ -8,7 +8,16 @@ class ResponseGeneratorTests: XCTestCase {
         
         let json = generator.generateJson()
         XCTAssertEqual(json["version"] as? String, "1.0")
+        XCTAssertEqual(json["shouldEndSession"] as? Bool, true)
         XCTAssertNotNil(json["response"])
+    }
+    
+    func testStandardResponseShouldEndSessionFalse() {
+        let standardResponse = StandardResponse(shouldEndSession: false)
+        let generator = ResponseGenerator(standardResponse: standardResponse)
+        
+        let json = generator.generateJson()
+        XCTAssertEqual(json["shouldEndSession"] as? Bool, false)
     }
     
     func testStandardResponseOutputSpeechPlain() {
