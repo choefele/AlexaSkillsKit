@@ -7,10 +7,14 @@ public class ResponseGenerator {
         self.standardResponse = standardResponse
     }
     
-    public func generateJson() -> [String: Any] {
+    public func generateJSONObject() -> [String: Any] {
         var json: [String: Any] = ["version": "1.0", "shouldEndSession": standardResponse.shouldEndSession]
         json["response"] = ResponseGenerator.generateStandardResponse(standardResponse)
         return json
+    }
+    
+    public func generateJSON(options: JSONSerialization.WritingOptions = []) throws -> Data {
+        return try JSONSerialization.data(withJSONObject: generateJSONObject(), options: options)
     }
 }
 
