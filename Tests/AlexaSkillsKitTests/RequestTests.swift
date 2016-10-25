@@ -1,7 +1,14 @@
+import Foundation
 import AlexaSkillsKit
 import XCTest
 
 class RequestTests: XCTestCase {
+    static let allTests = [
+        ("testLaunchRequest", testLaunchRequest),
+        ("testIntentRequest", testIntentRequest),
+        ("testSessionEndedRequest", testSessionEndedRequest)
+    ]
+    
     func testLaunchRequest() {
         let date = Date()
         let locale = Locale(identifier: "identifier")

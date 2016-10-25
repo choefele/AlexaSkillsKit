@@ -1,7 +1,18 @@
+import Foundation
 import AlexaSkillsKit
 import XCTest
 
 class ResponseGeneratorTests: XCTestCase {
+    static let allTests = [
+        ("testStandardResponseMinimal", testStandardResponseMinimal),
+        ("testStandardResponseShouldEndSessionFalse", testStandardResponseShouldEndSessionFalse),
+        ("testStandardResponseOutputSpeechPlain", testStandardResponseOutputSpeechPlain),
+        ("testStandardResponseCardSimple", testStandardResponseCardSimple),
+        ("testStandardResponseCardStandard", testStandardResponseCardStandard),
+        ("testStandardResponseRepromptPlain", testStandardResponseRepromptPlain),
+        ("testGenerateJSON", testGenerateJSON),
+    ]
+
     func testStandardResponseMinimal() {
         let standardResponse = StandardResponse(shouldEndSession: true)
         let generator = ResponseGenerator(standardResponse: standardResponse)

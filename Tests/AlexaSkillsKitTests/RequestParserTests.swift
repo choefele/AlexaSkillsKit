@@ -1,3 +1,4 @@
+import Foundation
 import AlexaSkillsKit
 import XCTest
 
@@ -17,7 +18,9 @@ func createDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second:
 
 class RequestParserTests: XCTestCase {
     static let allTests = [
-        ("testLaunchRequest", testLaunchRequest)
+        ("testLaunchRequest", testLaunchRequest),
+        ("testIntentRequest", testIntentRequest),
+        ("testSessionEndedRequest", testSessionEndedRequest)
     ]
     
     func testLaunchRequest() throws {
