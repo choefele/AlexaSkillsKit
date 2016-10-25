@@ -8,13 +8,31 @@ public class ResponseGenerator {
     }
     
     public func generateJSONObject() -> [String: Any] {
-        var json: [String: Any] = ["version": "1.0", "shouldEndSession": standardResponse.shouldEndSession]
+        var json: [String: Any] = ["version": "1.0"]
+        #if os(Linux)
+            json["shouldEndSession"] = NSNumber(booleanLiteral: standardResponse.shouldEndSession)
+
+        #else
+            json["shouldEndSession"] = standardResponse.shouldEndSession
+        #endif
         json["response"] = ResponseGenerator.generateStandardResponse(standardResponse)
         return json
     }
     
     public func generateJSON(options: JSONSerialization.WritingOptions = []) throws -> Data {
-        return try JSONSerialization.data(withJSONObject: generateJSONObject(), options: options)
+        let data = try JSONSerialization.data(withJSONObject: generateJSONObject(), options: options)
+
+        // JSONSerialization bug with Bools: https://bugs.swift.org/browse/SR-3013
+        var dataString = String(data: data, encoding: .utf8)
+        if options.contains(.prettyPrinted) {
+            dataString = dataString?.replacingOccurrences(of: "\": 1", with: "\" : true")
+            dataString = dataString?.replacingOccurrences(of: "\": 0", with: "\" : false")
+        } else {
+            dataString = dataString?.replacingOccurrences(of: "\":1", with: "\":true")
+            dataString = dataString?.replacingOccurrences(of: "\":0", with: "\":false")
+        }
+
+        return dataString?.data(using: .utf8) ?? data
     }
 }
 
