@@ -1,7 +1,12 @@
+import Foundation
 import AlexaSkillsKit
 import XCTest
 
 class ResponseTests: XCTestCase {
+    static let allTests = [
+        ("testStandardResponse", testStandardResponse)
+    ]
+    
     func testStandardResponse() {
         let outputSpeech = OutputSpeech.plain(text: "text")
         let image = Image(smallImageUrl: URL(fileURLWithPath: "path"), largeImageUrl: URL(fileURLWithPath: "path"))

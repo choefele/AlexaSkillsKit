@@ -1,9 +1,12 @@
 #if os(Linux)
 import XCTest
 
-@testable import SwiftServerLibraryTests
+@testable import AlexaSkillsKitTests
 
 XCTMain([
-       testCase(ItemTests.allTests)
+       testCase(RequestParserTests.allTests),
+       testCase(RequestTests.allTests),
+       testCase(ResponseGeneratorTests.allTests),
+       testCase(ResponseTests.allTests)
 ])
 #endif
