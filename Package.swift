@@ -4,4 +4,7 @@ let package = Package(
     name: "AlexaSkillsKit",
     targets: [
         Target(name: "AlexaSkillsKit"),
+    ],
+    exclude: [
+        "Samples"
     ])
