@@ -11,9 +11,7 @@ It's early days – expect API changes until we reach 1.0!
 
 `AlexaSkillsKit` works on AWS Lambda using an Alexa Skills Kit trigger, but also as part of any other Swift server environment via Alexa's HTTPS API. 
 
-Using Lambda, Amazon will take care of scaling and running your code. Lambda, however, doesn't support Swift executables natively thus the support depends on coming up with clever ways to work around that. 
-
-A stand-alone server allows you to use alternate cloud providers and run multiple skills on the same server using any Swift web framework such as [Kitura](https://github.com/IBM-Swift/Kitura), [Vapor](https://github.com/vapor/vapor) or [Perfect](https://github.com/PerfectlySoft/Perfect).
+Using Lambda, Amazon will take care of scaling and running your code. Lambda, however, doesn't support Swift executables natively thus the support depends on coming up with clever ways to work around that. A stand-alone server allows you to use alternate cloud providers and run multiple skills on the same server using any Swift web framework such as [Kitura](https://github.com/IBM-Swift/Kitura), [Vapor](https://github.com/vapor/vapor) or [Perfect](https://github.com/PerfectlySoft/Perfect).
 
 ### Lambda
 
