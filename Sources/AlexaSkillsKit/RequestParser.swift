@@ -14,6 +14,10 @@ public class RequestParser {
         try self.init(with: data)
     }
     
+    public convenience init(fileHandle: FileHandle) throws {
+        try self.init(with: fileHandle.readDataToEndOfFile())
+    }
+    
     public convenience init(with data: Data) throws {
         let json = try JSONSerialization.jsonObject(with: data)
         self.init(json: json)
