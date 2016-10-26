@@ -35,7 +35,7 @@ A sample for a custom skill using Lambda is provided in [Samples/Lambda](https:/
  - Sample utterances: "TestIntent test swift"
  - Service endpoint type: AWS Lambda ARN (use the ARN from the AWS Console)
  
- Now you can test the skill in the Alexa Console using the utterance "test swift". More details on configuring Alexa skills can be found on [Amazon's developer portal](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/overviews/steps-to-build-a-custom-skill).
+Now you can test the skill in the Alexa Console using the utterance "test swift". More details on configuring Alexa skills can be found on [Amazon's developer portal](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/overviews/steps-to-build-a-custom-skill).
 
 ### Stand-Alone Server
 _Coming soon_
