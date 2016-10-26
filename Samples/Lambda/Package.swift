@@ -3,5 +3,5 @@ import PackageDescription
 let package = Package(
     name: "Lambda",
     dependencies: [
-        .Package(url: "../..", majorVersion: 0)
+        .Package(url: "https://github.com/choefele/AlexaSkillsKit", majorVersion: 0)
     ])
