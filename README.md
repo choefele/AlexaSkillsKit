@@ -23,7 +23,21 @@ A sample for a custom skill using Lambda is provided in [Samples/Lambda](https:/
 - Lambda executables take their input via `stdin` and provide output via `stdout` – you can try this out by piping a test file into the executable `swift build && cat ../../Tests/AlexaSkillsKitTests/launch_request.json | ./.build/debug/Lambda`
 - Execute `./build-lambda-package.sh` to build the executable for Linux. The Swift compiler will run inside a docker container that provides a build environment for Linux
 - This will result in a zip file at .build/lambda/lambda.zip that contains the executable, its libraries and a Node.js shim that provides an execution context.
-- Create a new Lambda function in the [AWS Console](https://console.aws.amazon.com/lambda/home) in US East (N. Virginia)
+- Create a new Lambda function in the [AWS Console](https://console.aws.amazon.com/lambda/home) in the US East (N. Virginia) region
+ - Use an Alexa Skills Kit trigger
+ - Runtime: NodeJS 4.3
+ - Code entry type: ZIP file (upload the lambda.zip file from the previous step)
+ - Handler: index.handler
+ - Role: Create from template or use existing role
+- After creating the Lambda function, you can now test your code using an Alexa test event in the AWS console
+- To create an Alexa skill
+ - Go to the [Alexa console](https://developer.amazon.com/edw/home.html#/skills/list) and create a new skill
+ - Skill type: Custom Interaction Model
+ - Intent: `{ "intents": [{"intent": "TestIntent"}]}`
+ - Sample utterances: "TestIntent test swift"
+ - Service endpoint type: AWS Lambda ARN (use the ARN from the AWS Console)
+ 
+ Now you can test the skill in the Alexa Console using the utterance "test swift". More details on configuring Alexa skills can be found on [Amazon's developer portal](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/overviews/steps-to-build-a-custom-skill).
 
 ### Stand-Alone Server
 _Coming soon_
