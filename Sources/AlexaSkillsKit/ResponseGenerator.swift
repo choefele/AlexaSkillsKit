@@ -11,7 +11,6 @@ public class ResponseGenerator {
         var json: [String: Any] = ["version": "1.0"]
         #if os(Linux)
             json["shouldEndSession"] = NSNumber(booleanLiteral: standardResponse.shouldEndSession)
-
         #else
             json["shouldEndSession"] = standardResponse.shouldEndSession
         #endif
@@ -25,11 +24,11 @@ public class ResponseGenerator {
         // JSONSerialization bug with Bools: https://bugs.swift.org/browse/SR-3013
         var dataString = String(data: data, encoding: .utf8)
         if options.contains(.prettyPrinted) {
-            dataString = dataString?.replacingOccurrences(of: "\": 1", with: "\" : true")
-            dataString = dataString?.replacingOccurrences(of: "\": 0", with: "\" : false")
+            dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\": 1", with: "\"shouldEndSession\" : true")
+            dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\": 0", with: "\"shouldEndSession\" : false")
         } else {
-            dataString = dataString?.replacingOccurrences(of: "\":1", with: "\":true")
-            dataString = dataString?.replacingOccurrences(of: "\":0", with: "\":false")
+            dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\":1", with: "\"shouldEndSession\":true")
+            dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\":0", with: "\"shouldEndSession\":false")
         }
 
         return dataString?.data(using: .utf8) ?? data
