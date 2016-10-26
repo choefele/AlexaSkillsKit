@@ -1,7 +1,7 @@
 # AlexaSkillsKit
 [![Build Status](https://travis-ci.org/choefele/AlexaSkillsKit.svg?branch=master)](https://travis-ci.org/choefele/AlexaSkillsKit)
 
-AlexaSkillsKit is a library allows you to develop custom skills for [Amazon Alexa](https://developer.amazon.com/alexa), the voice service that powers Echo, in Swift. It takes care of parsing JSON requests from Amazon, generating the proper responses and providing convenience methods to handle all other features that Alexa offers.
+AlexaSkillsKit is a Swift library that allows you to develop custom skills for [Amazon Alexa](https://developer.amazon.com/alexa), the voice service that powers Echo. It takes care of parsing JSON requests from Amazon, generating the proper responses and providing convenience methods to handle all other features that Alexa offers.
 
 AlexaSkillsKit has been inspired by [alexa-app](https://github.com/matt-kruse/alexa-app) and [SwiftOnLambda](https://github.com/algal/SwiftOnLambda).
 
