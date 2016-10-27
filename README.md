@@ -41,4 +41,24 @@ Now you can test the skill in the Alexa Console using the utterance "test swift"
 _Coming soon_
 
 ## Supported Features
+### Request Envelope
+| Feature | Supported |
+| --- | --- |
+| version | yes |
+| session | |
+| context | |
+| request | partially, see below|
 
+### Requests
+| Feature | Supported |
+| --- | --- |
+| LaunchRequest | yes |
+| IntentRequest | yes |
+| SessionEndedRequest | yes |
+| AudioPlayer Requests | |
+| PlaybackController Requests | |
+
+### Response
+| Feature | Supported |
+| --- | --- |
+|  | partially |
