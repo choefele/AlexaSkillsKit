@@ -1,5 +1,53 @@
 import Foundation
 
+public struct Session: Equatable {
+    public var isNew: Bool
+    public var sessionId: String
+    public var application: Application
+    public var attributes: [String: Any]
+    public var user: User
+    
+    public init(isNew: Bool, sessionId: String, application: Application, attributes: [String: Any], user: User) {
+        self.isNew = isNew
+        self.sessionId = sessionId
+        self.application = application
+        self.attributes = attributes
+        self.user = user
+    }
+    
+    public static func ==(lhs: Session, rhs: Session) -> Bool {
+        return lhs.isNew == rhs.isNew &&
+            lhs.sessionId == rhs.sessionId
+    }
+}
+
+public struct Application: Equatable {
+    public var applicationId: String
+    
+    public init(applicationId: String) {
+        self.applicationId = applicationId
+    }
+    
+    public static func ==(lhs: Application, rhs: Application) -> Bool {
+        return lhs.applicationId == rhs.applicationId
+    }
+}
+
+public struct User: Equatable {
+    public var userId: String
+    public var accessToken: String
+    
+    public init(userId: String, accessToken: String) {
+        self.userId = userId
+        self.accessToken = accessToken
+    }
+    
+    public static func ==(lhs: User, rhs: User) -> Bool {
+        return lhs.userId == rhs.userId &&
+            lhs.accessToken == rhs.accessToken
+    }
+}
+
 public struct LaunchRequest: Equatable {
     public var request: Request
     
