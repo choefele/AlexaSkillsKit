@@ -37,7 +37,8 @@ public class RequestParser {
                 return nil
         }
         
-        return Session(isNew: isNew, sessionId: sessionId, application: application, attributes: [:], user: user)
+        let attributes = RequestParser.parseAttributes(jsonSession)
+        return Session(isNew: isNew, sessionId: sessionId, application: application, attributes: attributes, user: user)
     }
     
     public func parseRequestType() -> RequestType? {
@@ -105,6 +106,11 @@ extension RequestParser {
         }
         
         return Application(applicationId: applicationId)
+    }
+    
+    class func parseAttributes(_ jsonSession: [String: Any]) -> [String: Any] {
+        let attributes = jsonSession["attributes"] as? [String: Any]
+        return attributes ?? [String: Any]()
     }
     
     class func parseUser(_ jsonSession: [String: Any]) -> User? {
