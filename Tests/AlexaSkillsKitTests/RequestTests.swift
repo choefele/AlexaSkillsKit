@@ -9,6 +9,17 @@ class RequestTests: XCTestCase {
         ("testSessionEndedRequest", testSessionEndedRequest)
     ]
     
+    func testSession() {
+        let application = Application(applicationId: "applicationId")
+        let attributes = ["attribute": true]
+        let user = User(userId: "userId", accessToken: "accessToken")
+        let session = Session(isNew: true, sessionId: "sessionId", application: application, attributes: attributes, user: user)
+        XCTAssertEqual(session, session)
+        XCTAssertEqual(session, Session(isNew: true, sessionId: "sessionId", application: application, attributes: attributes, user: user))
+        
+        XCTAssertNotEqual(session, Session(isNew: false, sessionId: "sessionId", application: application, attributes: attributes, user: user))
+    }
+    
     func testLaunchRequest() {
         let date = Date()
         let locale = Locale(identifier: "identifier")
