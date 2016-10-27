@@ -18,10 +18,25 @@ func createDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second:
 
 class RequestParserTests: XCTestCase {
     static let allTests = [
+        ("testSession", testSession),
         ("testLaunchRequest", testLaunchRequest),
         ("testIntentRequest", testIntentRequest),
         ("testSessionEndedRequest", testSessionEndedRequest)
     ]
+    
+    func testSession() throws {
+        let parser = try RequestParser(contentsOf: createFilePath(for: "intent_request.json"))
+        
+        let session = parser.parseSession()
+        XCTAssertEqual(session?.isNew, false)
+        XCTAssertEqual(session?.sessionId, "amzn1.echo-api.session.0000000-0000-0000-0000-00000000000")
+        XCTAssertEqual(session?.application.applicationId, "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe")
+//        let attribute = session?.attributes["supportedHoroscopePeriods"] as? [String: Bool]
+//        let a: [String: Bool]? = ["daily": true, "weekly": false, "monthly": false]
+//        XCTAssertEqual(attribute, a)
+        XCTAssertEqual(session?.user.userId, "amzn1.account.AM3B00000000000000000000000")
+        XCTAssertNil(session?.user.accessToken)
+    }
     
     func testLaunchRequest() throws {
         let parser = try RequestParser(contentsOf: createFilePath(for: "launch_request.json"))
