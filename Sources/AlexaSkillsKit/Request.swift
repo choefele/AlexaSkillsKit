@@ -35,9 +35,9 @@ public struct Application: Equatable {
 
 public struct User: Equatable {
     public var userId: String
-    public var accessToken: String
+    public var accessToken: String?
     
-    public init(userId: String, accessToken: String) {
+    public init(userId: String, accessToken: String? = nil) {
         self.userId = userId
         self.accessToken = accessToken
     }

@@ -27,6 +27,19 @@ public class RequestParser {
         self.json = json
     }
     
+    public func parseSession() -> Session? {
+        guard let jsonEnvelope = json as? [String: Any],
+            let jsonSession = jsonEnvelope["session"] as? [String: Any],
+            let isNew = jsonSession["new"] as? Bool,
+            let sessionId = jsonSession["sessionId"] as? String,
+            let application = RequestParser.parseApplication(jsonSession),
+            let user = RequestParser.parseUser(jsonSession) else {
+                return nil
+        }
+        
+        return Session(isNew: isNew, sessionId: sessionId, application: application, attributes: [:], user: user)
+    }
+    
     public func parseRequestType() -> RequestType? {
         guard let jsonEnvelope = json as? [String: Any],
             let jsonRequest = jsonEnvelope["request"] as? [String: Any],
@@ -83,6 +96,25 @@ extension RequestParser {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         
         return dateFormatter.date(from: string)
+    }
+    
+    class func parseApplication(_ jsonSession: [String: Any]) -> Application? {
+        guard let jsonApplication = jsonSession["application"] as? [String: Any],
+            let applicationId = jsonApplication["applicationId"] as? String else {
+            return nil
+        }
+        
+        return Application(applicationId: applicationId)
+    }
+    
+    class func parseUser(_ jsonSession: [String: Any]) -> User? {
+        guard let jsonUser = jsonSession["user"] as? [String: Any],
+            let userId = jsonUser["userId"] as? String else {
+                return nil
+        }
+        
+        let accessToken = jsonUser["accessToken"] as? String
+        return User(userId: userId, accessToken: accessToken)
     }
     
     class func parseRequest(_ jsonRequest: [String: Any]) -> Request? {
