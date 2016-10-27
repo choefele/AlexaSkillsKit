@@ -58,7 +58,25 @@ _Coming soon_
 | AudioPlayer Requests | |
 | PlaybackController Requests | |
 
+### Response Envelope
+| Feature | Supported |
+| --- | --- |
+| version | yes |
+| sessionAttributes | |
+| response | partially, see below |
+
 ### Response
 | Feature | Supported |
 | --- | --- |
-|  | partially |
+| outputSpeech | partially (plain yes, SSML no)|
+| card | |
+| reprompt | |
+| directives | |
+| shouldEndSession | yes |
+
+### Other
+| Feature | Supported |
+| --- | --- |
+| Account Linking | |
+| Multiple Languages | partially (locale attribute supported)|
+| Built-in Intents | |
