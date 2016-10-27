@@ -4,6 +4,7 @@ import XCTest
 
 class RequestTests: XCTestCase {
     static let allTests = [
+        ("testSession", testSession),
         ("testLaunchRequest", testLaunchRequest),
         ("testIntentRequest", testIntentRequest),
         ("testSessionEndedRequest", testSessionEndedRequest)
