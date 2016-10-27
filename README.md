@@ -45,7 +45,7 @@ _Coming soon_
 | Feature | Supported |
 | --- | --- |
 | version | yes |
-| session | |
+| session | yes |
 | context | |
 | request | partially, see below|
 

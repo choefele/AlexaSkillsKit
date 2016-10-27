@@ -31,9 +31,13 @@ class RequestParserTests: XCTestCase {
         XCTAssertEqual(session?.isNew, false)
         XCTAssertEqual(session?.sessionId, "amzn1.echo-api.session.0000000-0000-0000-0000-00000000000")
         XCTAssertEqual(session?.application.applicationId, "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe")
-//        let attribute = session?.attributes["supportedHoroscopePeriods"] as? [String: Bool]
-//        let a: [String: Bool]? = ["daily": true, "weekly": false, "monthly": false]
-//        XCTAssertEqual(attribute, a)
+        
+        let attribute = session?.attributes["supportedHoroscopePeriods"] as? [String: Bool]
+        XCTAssertNotNil(attribute)
+        if let attribute = attribute {
+            XCTAssertEqual(attribute, ["daily": true, "weekly": false, "monthly": false])
+        }
+        
         XCTAssertEqual(session?.user.userId, "amzn1.account.AM3B00000000000000000000000")
         XCTAssertNil(session?.user.accessToken)
     }
