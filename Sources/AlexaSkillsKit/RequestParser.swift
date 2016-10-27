@@ -128,16 +128,19 @@ extension RequestParser {
         return Request(requestId: requestId, timestamp: timestamp, locale: Locale(identifier: localeString))
     }
     
-    class func parseSlots(_ jsonSlots: [String: Any]) -> [String: Slot] {
+    class func parseSlots(_ jsonIntent: [String: Any]) -> [String: Slot] {
         var slots = [String: Slot]()
-        for (key, json) in jsonSlots {
-            guard let jsonSlot = json as? [String: Any],
-                let name = jsonSlot["name"] as? String else {
-                    continue
-            }
+        
+        if let jsonSlots = jsonIntent["slots"] as? [String: Any] {
+            for (key, json) in jsonSlots {
+                guard let jsonSlot = json as? [String: Any],
+                    let name = jsonSlot["name"] as? String else {
+                        continue
+                }
             
-            let value = jsonSlot["value"] as? String
-            slots[key] = Slot(name: name, value: value)
+                let value = jsonSlot["value"] as? String
+                slots[key] = Slot(name: name, value: value)
+            }
         }
 
         return slots
@@ -145,12 +148,11 @@ extension RequestParser {
     
     class func parseIntent(_ jsonRequest: [String: Any]) -> Intent? {
         guard let jsonIntent = jsonRequest["intent"] as? [String: Any],
-            let name = jsonIntent["name"] as? String,
-            let jsonSlots = jsonIntent["slots"] as? [String: Any] else {
+            let name = jsonIntent["name"] as? String else {
                 return nil
         }
         
-        let slots = RequestParser.parseSlots(jsonSlots)
+        let slots = RequestParser.parseSlots(jsonIntent)
         return Intent(name: name, slots: slots)
     }
     
