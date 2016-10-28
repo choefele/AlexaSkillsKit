@@ -20,11 +20,7 @@ class ResponseGeneratorTests: XCTestCase {
         
         let json = generator.generateJSONObject()
         XCTAssertEqual(json["version"] as? String, "1.0")
-        #if os(Linux)
-            XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 1)
-        #else
-            XCTAssertEqual(json["shouldEndSession"] as? Bool, true)
-        #endif
+        XCTAssertEqual(json["shouldEndSession"] as? Bool, true)
 
         XCTAssertNotNil(json["response"])
     }
@@ -34,11 +30,7 @@ class ResponseGeneratorTests: XCTestCase {
         let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJSONObject()
-        #if os(Linux)
-            XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 0)
-        #else
-            XCTAssertEqual(json["shouldEndSession"] as? Bool, false)
-        #endif
+        XCTAssertEqual(json["shouldEndSession"] as? Bool, false)
     }
 
     func testStandardResponseOutputSpeechPlain() {
