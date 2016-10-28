@@ -4,7 +4,7 @@ docker run \
     --rm \
     --volume "$(pwd):/app" \
     --workdir /app \
-    smithmicro/swift:3.0 \
+    choefele/swift \
     swift build -c release --build-path .build/native
 
 mkdir -p .build/lambda/native/LinuxLibraries
