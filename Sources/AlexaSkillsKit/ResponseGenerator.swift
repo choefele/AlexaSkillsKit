@@ -9,11 +9,7 @@ public class ResponseGenerator {
     
     public func generateJSONObject() -> [String: Any] {
         var json: [String: Any] = ["version": "1.0"]
-        #if os(Linux)
-            json["shouldEndSession"] = NSNumber(booleanLiteral: standardResponse.shouldEndSession)
-        #else
-            json["shouldEndSession"] = standardResponse.shouldEndSession
-        #endif
+        json["shouldEndSession"] = standardResponse.shouldEndSession
         json["response"] = ResponseGenerator.generateStandardResponse(standardResponse)
         return json
     }
