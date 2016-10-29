@@ -96,7 +96,7 @@ public struct Intent: Equatable {
     public var name: String
     public var slots: [String: Slot]
     
-    public init(name: String, slots: [String: Slot]) {
+    public init(name: String, slots: [String: Slot] = [:]) {
         self.name = name
         self.slots = slots
     }
@@ -104,6 +104,24 @@ public struct Intent: Equatable {
     public static func ==(lhs: Intent, rhs: Intent) -> Bool {
         return lhs.name == rhs.name && lhs.slots == rhs.slots
     }
+}
+
+public enum BuiltInIntent: String {
+    case cancel = "AMAZON.CancelIntent"
+    case help = "AMAZON.HelpIntent"
+    case loopOff = "AMAZON.LoopOffIntent"
+    case loopOn = "AMAZON.LoopOnIntent"
+    case next = "AMAZON.NextIntent"
+    case no = "AMAZON.NoIntent"
+    case pause = "AMAZON.PauseIntent"
+    case previous = "AMAZON.PreviousIntent"
+    case repeatThat = "AMAZON.RepeatIntent" // can't use repeat as enum value in 3.0
+    case resume = "AMAZON.ResumeIntent"
+    case shuffleOff = "AMAZON.ShuffleOffIntent"
+    case shuffleOn = "AMAZON.ShuffleOnIntent"
+    case startOver = "AMAZON.StartOverIntent"
+    case stop = "AMAZON.StopIntent"
+    case yes = "AMAZON.YesIntent"
 }
 
 public struct Slot: Equatable {

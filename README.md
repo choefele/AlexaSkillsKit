@@ -47,7 +47,7 @@ _Coming soon_
 | version | yes |
 | session | yes |
 | context | |
-| request | partially, see below|
+| request | partially, see below |
 
 ### Requests
 | Feature | Supported |
@@ -68,7 +68,7 @@ _Coming soon_
 ### Response
 | Feature | Supported |
 | --- | --- |
-| outputSpeech | partially (plain yes, SSML no)|
+| outputSpeech | partially (plain yes, SSML no) |
 | card | |
 | reprompt | |
 | directives | |
@@ -77,6 +77,6 @@ _Coming soon_
 ### Other
 | Feature | Supported |
 | --- | --- |
+| Request handler | |
 | Account Linking | |
-| Multiple Languages | partially (locale attribute supported)|
-| Built-in Intents | |
+| Multiple Languages | partially (locale attribute supported) |
