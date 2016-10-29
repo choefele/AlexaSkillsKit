@@ -62,7 +62,7 @@ func generateSessionContinueResponse(intentRequest: IntentRequest, session: Sess
 
 func generateSessionStopResponse(intentRequest: IntentRequest, session: Session?) -> (StandardResponse, [String: Any]) {
     let outputSpeech = OutputSpeech.plain(text: "Test session end")
-    let standardResponse = StandardResponse(outputSpeech: outputSpeech, shouldEndSession: false)
+    let standardResponse = StandardResponse(outputSpeech: outputSpeech, shouldEndSession: true)
     
     return (standardResponse, [:])
 }
