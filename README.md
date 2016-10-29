@@ -80,3 +80,4 @@ _Coming soon_
 | Request handler | |
 | Account Linking | |
 | Multiple Languages | partially (locale attribute supported) |
+| Response validation | |
