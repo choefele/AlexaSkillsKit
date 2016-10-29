@@ -43,6 +43,11 @@ class RequestTests: XCTestCase {
         XCTAssertNotEqual(intentRequest, IntentRequest(request: request1, intent: intent))
     }
     
+    func testBuiltInIntent() {
+        let intent = Intent(name: "AMAZON.YesIntent")
+        XCTAssertEqual(intent.name, BuiltInIntent.yes.rawValue)
+    }
+    
     func testSessionEndedRequest() {
         let request0 = Request(requestId: "requestId", timestamp: Date(), locale: Locale(identifier: "identifier"))
         let reason: Reason = .error(Error(type: .invalidResponse, message: "message"))
