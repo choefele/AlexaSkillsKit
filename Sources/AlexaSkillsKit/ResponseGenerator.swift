@@ -64,7 +64,7 @@ extension ResponseGenerator {
     class func generateCard(_ card: Card) -> [String: Any] {
         switch card {
         case .simple(let title, let content):
-            var jsonCard: [String: Any] = ["type": "Standard"]
+            var jsonCard: [String: Any] = ["type": "Simple"]
             jsonCard["title"] = title
             jsonCard["content"] = content
             return jsonCard
