@@ -4,7 +4,7 @@ import XCTest
 
 class ResponseGeneratorTests: XCTestCase {
     static let allTests = [
-        ("testStandardResponseMinimal", testStandardResponseMinimal),
+        ("testResponseMinimal", testResponseMinimal),
         ("testStandardResponseShouldEndSessionFalse", testStandardResponseShouldEndSessionFalse),
         ("testStandardResponseOutputSpeechPlain", testStandardResponseOutputSpeechPlain),
         ("testStandardResponseCardSimple", testStandardResponseCardSimple),
@@ -14,33 +14,33 @@ class ResponseGeneratorTests: XCTestCase {
         ("testGenerateJSONFalse", testGenerateJSONFalse)
     ]
 
-    func testStandardResponseMinimal() {
+    func testResponseMinimal() {
         let standardResponse = StandardResponse(shouldEndSession: true)
         let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJSONObject()
         XCTAssertEqual(json["version"] as? String, "1.0")
+
+        XCTAssertNil(json["sessionAttributes"])
+        XCTAssertNotNil(json["response"])
         #if os(Linux)
             XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 1)
         #else
             XCTAssertEqual(json["shouldEndSession"] as? Bool, true)
         #endif
-
-        XCTAssertNotNil(json["response"])
     }
     
-    func testStandardResponseShouldEndSessionFalse() {
-        let standardResponse = StandardResponse(shouldEndSession: false)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
-        
-        let json = generator.generateJSONObject()
-        #if os(Linux)
-            XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 0)
-        #else
-            XCTAssertEqual(json["shouldEndSession"] as? Bool, false)
-        #endif
-    }
+    func testSessionAttributes() {
+        let standardResponse = StandardResponse(shouldEndSession: true)
+        let sessionAttributes: [String: Any] = ["1": 1, "2": "two"]
+        let generator = ResponseGenerator(standardResponse: standardResponse, sessionAttributes: sessionAttributes)
 
+        let json = generator.generateJSONObject()
+        let jsonSessionAttributes = json["sessionAttributes"] as? [String: Any]
+        XCTAssertEqual(jsonSessionAttributes?["1"] as? Int, sessionAttributes["1"] as? Int)
+        XCTAssertEqual(jsonSessionAttributes?["2"] as? String, sessionAttributes["2"] as? String)
+    }
+    
     func testStandardResponseOutputSpeechPlain() {
         let outputSpeech = OutputSpeech.plain(text: "text")
         let standardResponse = StandardResponse(outputSpeech: outputSpeech, shouldEndSession: true)
@@ -96,6 +96,30 @@ class ResponseGeneratorTests: XCTestCase {
         XCTAssertEqual(jsonOutputSpeech?.count, 2)
         XCTAssertEqual(jsonOutputSpeech?["type"] as? String, "PlainText")
         XCTAssertEqual(jsonOutputSpeech?["text"] as? String, "text")
+    }
+
+    func testStandardResponseShouldEndSessionTrue() {
+        let standardResponse = StandardResponse(shouldEndSession: true)
+        let generator = ResponseGenerator(standardResponse: standardResponse)
+        
+        let json = generator.generateJSONObject()
+        #if os(Linux)
+            XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 1)
+        #else
+            XCTAssertEqual(json["shouldEndSession"] as? Bool, true)
+        #endif
+    }
+    
+    func testStandardResponseShouldEndSessionFalse() {
+        let standardResponse = StandardResponse(shouldEndSession: false)
+        let generator = ResponseGenerator(standardResponse: standardResponse)
+        
+        let json = generator.generateJSONObject()
+        #if os(Linux)
+            XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 0)
+        #else
+            XCTAssertEqual(json["shouldEndSession"] as? Bool, false)
+        #endif
     }
     
     func testGenerateJSONTrue() {
