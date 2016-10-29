@@ -2,19 +2,24 @@ import Foundation
 
 public class ResponseGenerator {
     public let standardResponse: StandardResponse
+    public let sessionAttributes: [String: Any]
     
-    public init(standardResponse: StandardResponse) {
+    public init(standardResponse: StandardResponse, sessionAttributes: [String: Any] = [:]) {
         self.standardResponse = standardResponse
+        self.sessionAttributes = sessionAttributes
     }
     
     public func generateJSONObject() -> [String: Any] {
         var json: [String: Any] = ["version": "1.0"]
+
+        json["sessionAttributes"] = sessionAttributes.isEmpty ? nil : sessionAttributes
+        json["response"] = ResponseGenerator.generateStandardResponse(standardResponse)
         #if os(Linux)
             json["shouldEndSession"] = NSNumber(booleanLiteral: standardResponse.shouldEndSession)
         #else
             json["shouldEndSession"] = standardResponse.shouldEndSession
         #endif
-        json["response"] = ResponseGenerator.generateStandardResponse(standardResponse)
+        
         return json
     }
     
