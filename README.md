@@ -69,8 +69,8 @@ _Coming soon_
 | Feature | Supported |
 | --- | --- |
 | outputSpeech | partially (plain yes, SSML no) |
-| card | |
-| reprompt | |
+| card | yes |
+| reprompt | yes |
 | directives | |
 | shouldEndSession | yes |
 
