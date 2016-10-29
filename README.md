@@ -62,7 +62,7 @@ _Coming soon_
 | Feature | Supported |
 | --- | --- |
 | version | yes |
-| sessionAttributes | |
+| sessionAttributes | yes |
 | response | partially, see below |
 
 ### Response
