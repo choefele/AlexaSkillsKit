@@ -22,12 +22,8 @@ class ResponseGeneratorTests: XCTestCase {
         XCTAssertEqual(json["version"] as? String, "1.0")
 
         XCTAssertNil(json["sessionAttributes"])
-        XCTAssertNotNil(json["response"])
-        #if os(Linux)
-            XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 1)
-        #else
-            XCTAssertEqual(json["shouldEndSession"] as? Bool, true)
-        #endif
+        let jsonResponse = json["response"] as? [String: Any]
+        XCTAssertEqual(jsonResponse?.count, 0)
     }
     
     func testSessionAttributes() {
@@ -103,11 +99,8 @@ class ResponseGeneratorTests: XCTestCase {
         let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJSONObject()
-        #if os(Linux)
-            XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 1)
-        #else
-            XCTAssertEqual(json["shouldEndSession"] as? Bool, true)
-        #endif
+        let jsonResponse = json["response"] as? [String: Any]
+        XCTAssertNil(jsonResponse?["shouldEndSession"])
     }
     
     func testStandardResponseShouldEndSessionFalse() {
@@ -115,10 +108,11 @@ class ResponseGeneratorTests: XCTestCase {
         let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJSONObject()
+        let jsonResponse = json["response"] as? [String: Any]
         #if os(Linux)
-            XCTAssertEqual(json["shouldEndSession"] as? NSNumber, 0)
+            XCTAssertEqual(jsonResponse?["shouldEndSession"] as? NSNumber, 0)
         #else
-            XCTAssertEqual(json["shouldEndSession"] as? Bool, false)
+            XCTAssertEqual(jsonResponse?["shouldEndSession"] as? Bool, false)
         #endif
     }
     
@@ -130,13 +124,13 @@ class ResponseGeneratorTests: XCTestCase {
         if true {
             let jsonData = try? generator.generateJSON()
             let jsonString = jsonData.flatMap { String(data: $0, encoding: .utf8) }
-            XCTAssertTrue(jsonString?.contains("shouldEndSession") == true)
+            XCTAssertTrue(jsonString?.contains("shouldEndSession") == false)
         }
 
         if true {
             let jsonData = try? generator.generateJSON(options: .prettyPrinted)
             let jsonString = jsonData.flatMap { String(data: $0, encoding: .utf8) }
-            XCTAssertTrue(jsonString?.contains("\"shouldEndSession\" : true") == true)
+            XCTAssertTrue(jsonString?.contains("shouldEndSession") == false)
         }
     }
 

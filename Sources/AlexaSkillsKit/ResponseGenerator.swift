@@ -14,11 +14,6 @@ public class ResponseGenerator {
 
         json["sessionAttributes"] = sessionAttributes.isEmpty ? nil : sessionAttributes
         json["response"] = ResponseGenerator.generateStandardResponse(standardResponse)
-        #if os(Linux)
-            json["shouldEndSession"] = NSNumber(booleanLiteral: standardResponse.shouldEndSession)
-        #else
-            json["shouldEndSession"] = standardResponse.shouldEndSession
-        #endif
         
         return json
     }
@@ -29,10 +24,8 @@ public class ResponseGenerator {
         // JSONSerialization bug with Bools: https://bugs.swift.org/browse/SR-3013
         var dataString = String(data: data, encoding: .utf8)
         if options.contains(.prettyPrinted) {
-            dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\": 1", with: "\"shouldEndSession\" : true")
             dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\": 0", with: "\"shouldEndSession\" : false")
         } else {
-            dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\":1", with: "\"shouldEndSession\":true")
             dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\":0", with: "\"shouldEndSession\":false")
         }
 
@@ -55,6 +48,14 @@ extension ResponseGenerator {
         
         if let card = standardResponse.card {
             jsonResponse["card"] = ResponseGenerator.generateCard(card)
+        }
+        
+        if !standardResponse.shouldEndSession {
+            #if os(Linux)
+                jsonResponse["shouldEndSession"] = NSNumber(booleanLiteral: standardResponse.shouldEndSession)
+            #else
+                jsonResponse["shouldEndSession"] = standardResponse.shouldEndSession
+            #endif
         }
         
         return jsonResponse
