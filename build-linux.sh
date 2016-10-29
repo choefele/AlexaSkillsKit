@@ -4,5 +4,5 @@ docker run \
     --rm \
     --volume "$(pwd):/app" \
     --workdir /app \
-    choefele/swift \
+    smithmicro/swift:3.0 \
     swift test --build-path /.build
