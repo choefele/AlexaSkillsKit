@@ -1,10 +1,10 @@
 import Foundation
 
-/// Provides additional context associated with a request that is maintained
-/// between request invocations.
+/// `Session` contains additional context associated with a request that is
+/// maintained between request invocations.
 ///
-/// Session attributes will survive individual request invocations if attributes
-/// are passed back in the response as `sessionAttributes` (see 
+/// Session attributes will survive individual invocations of a skill if
+/// attributes are passed back in the response as `sessionAttributes` (see
 /// `ResponseGenerator`) and the `shouldEndSession` flag is set to `false` (see
 /// `StandardResponse`).
 ///
@@ -56,9 +56,15 @@ public struct Session: Equatable {
     }
 }
 
+/// A value type containing an application ID. This can be used to verify that
+/// the request was intended for your service.
 public struct Application: Equatable {
+    /// A string representing the appliation ID for your skill.
     public var applicationId: String
     
+    /// Creates a new application with initial values.
+    ///
+    /// - Parameter applicationId: A string representing the appliation ID for your skill.
     public init(applicationId: String) {
         self.applicationId = applicationId
     }
@@ -76,10 +82,20 @@ public struct Application: Equatable {
     }
 }
 
+/// A value type that describes the user making the request.
 public struct User: Equatable {
+    /// A unique identifier for the user who made the request.
     public var userId: String
+    /// A token identifying the user in another system to support account
+    /// linking.
     public var accessToken: String?
     
+    /// Creates a new user with initial values.
+    ///
+    /// - Parameters:
+    ///   - userId: A unique identifier for the user who made the request.
+    ///   - accessToken: A token identifying the user in another system to
+    /// support account linking.
     public init(userId: String, accessToken: String? = nil) {
         self.userId = userId
         self.accessToken = accessToken
