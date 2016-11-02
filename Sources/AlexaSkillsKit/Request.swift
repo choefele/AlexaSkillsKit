@@ -115,9 +115,15 @@ public struct User: Equatable {
     }
 }
 
+/// A type that represents that a user made a request to an Alexa skill, but did
+/// not provide a specific intent.
 public struct LaunchRequest: Equatable {
+    /// A type containing standard request values.
     public var request: Request
     
+    /// Creates a new launch request with initial values.
+    ///
+    /// - Parameter request: A type containing standard request values.
     public init(request: Request) {
         self.request = request
     }
@@ -135,11 +141,21 @@ public struct LaunchRequest: Equatable {
     }
 }
 
+/// A type containing standard request values.
 public struct Request: Equatable {
+    /// Represents a unique identifier for the specific request.
     public var requestId: String
+    /// Provides the date and time when Alexa sent the request.
     public var timestamp: Date
+    /// A value type indicating the user’s locale.
     public var locale: Locale
     
+    /// Creates a new request with initial values.
+    ///
+    /// - Parameters:
+    ///   - requestId: Represents a unique identifier for the specific request.
+    ///   - timestamp: Provides the date and time when Alexa sent the request.
+    ///   - locale: A value type indicating the user’s locale.
     public init(requestId: String, timestamp: Date, locale: Locale) {
         self.requestId = requestId
         self.timestamp = timestamp
@@ -161,10 +177,19 @@ public struct Request: Equatable {
     }
 }
 
+/// A value typer that represents a request made to a skill based on what the
+/// user wants to do.
 public struct IntentRequest: Equatable {
+    /// A type containing standard request values.
     public var request: Request
+    /// A type containing intent-specific values.
     public var intent: Intent
     
+    /// Creates a new intent request with initial values.
+    ///
+    /// - Parameters:
+    ///   - request: A type containing standard request values.
+    ///   - intent: A type containing intent-specific values.
     public init(request: Request, intent: Intent) {
         self.request = request
         self.intent = intent
@@ -183,11 +208,20 @@ public struct IntentRequest: Equatable {
     }
 }
 
+/// A type containing values specific to an intent.
 public struct Intent: Equatable {
-
+    /// A string representing the name of the intent.
     public var name: String
+    /// A map of key-value pairs that further describes what the user
+    /// meant based on a predefined intent schema.
     public var slots: [String: Slot]
 
+    /// Creates a new intent with initial values.
+    ///
+    /// - Parameters:
+    ///   - name: A string representing the name of the intent.
+    ///   - slots: A map of key-value pairs that further describes what the user
+    /// meant based on a predefined intent schema.
     public init(name: String, slots: [String: Slot] = [:]) {
         self.name = name
         self.slots = slots
@@ -206,6 +240,23 @@ public struct Intent: Equatable {
     }
 }
 
+/// A list of built-in intent names
+///
+/// - cancel: A value indicating a cancel intent.
+/// - help: A value indicating a help intent.
+/// - loopOff: A value indicating a loop off intent.
+/// - loopOn: A value indicating a loop on intent.
+/// - next: A value indicating a next intent.
+/// - no: A value indicating a no intent.
+/// - pause: A value indicating a pause intent.
+/// - previous: A value indicating a previous intent.
+/// - repeatThat: A value indicating a repeat intent.
+/// - resume: A value indicating a resume intent.
+/// - shuffleOff: A value indicating a shuffle off intent.
+/// - shuffleOn: A value indicating a shuffle on intent.
+/// - startOver: A value indicating a start over intent.
+/// - stop: A value indicating a stop intent.
+/// - yes: A value indicating a yes intent.
 public enum BuiltInIntent: String {
     case cancel = "AMAZON.CancelIntent"
     case help = "AMAZON.HelpIntent"
@@ -224,10 +275,18 @@ public enum BuiltInIntent: String {
     case yes = "AMAZON.YesIntent"
 }
 
+/// The value of an intent slot.
 public struct Slot: Equatable {
+    /// A string that represents the name of the slot.
     public var name: String
+    /// A string that represents the value of the slot.
     public var value: String?
 
+    /// Creates a new slot with initial values.
+    ///
+    /// - Parameters:
+    ///   - name: A string that represents the name of the slot.
+    ///   - value: A string that represents the value of the slot.
     public init(name: String, value: String? = nil) {
         self.name = name
         self.value = value
@@ -246,10 +305,19 @@ public struct Slot: Equatable {
     }
 }
 
+/// A value type that represents a request made to an Alexa skill to notify that
+/// a session was ended.
 public struct SessionEndedRequest: Equatable {
+    /// A type containing standard request values.
     public var request: Request
+    /// Describes why the session ended.
     public var reason: Reason
     
+    /// Creates a new session ended request with initial values.
+    ///
+    /// - Parameters:
+    ///   - request: A type containing standard request values.
+    ///   - reason: Describes why the session ended.
     public init(request: Request, reason: Reason) {
         self.request = request
         self.reason = reason
@@ -269,6 +337,14 @@ public struct SessionEndedRequest: Equatable {
     }
 }
 
+/// Describes why a session ended.
+///
+/// - unknown: Value indicating an unknown reason.
+/// - userInitiated: The user explicitly ended the session.
+/// - error: An error occurred that caused the session to end.
+/// - exceededMaxReprompts: The user either did not respond or responded with an
+/// utterance that did not match any of the intents defined in your voice
+/// interface.
 public enum Reason: Equatable {
     case unknown
     case userInitiated
@@ -293,10 +369,18 @@ public enum Reason: Equatable {
     }
 }
 
+/// An error type providing more information about the error that occurred.
 public struct Error: Equatable {
+    /// Enum indicating the type of error that occurred.
     public var type: ErrorType
+    /// A string providing more information about the error.
     public var message: String
     
+    /// Creates a new error with initial values.
+    ///
+    /// - Parameters:
+    ///   - type: Enum indicating the type of error that occurred.
+    ///   - message: A string providing more information about the error.
     public init(type: ErrorType, message: String) {
         self.type = type
         self.message = message
@@ -315,6 +399,12 @@ public struct Error: Equatable {
     }
 }
 
+/// Enum that discribes the type of error that occurred.
+///
+/// - unknown: Value indicating an unknown error.
+/// - invalidResponse: Value indicating an invalid response.
+/// - deviceCommunicationError: Value indicating a device communication error.
+/// - internalError: Value indicating an internal error.
 public enum ErrorType {
     case unknown
     case invalidResponse
