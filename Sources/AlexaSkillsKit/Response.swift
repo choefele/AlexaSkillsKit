@@ -6,7 +6,7 @@ public struct StandardResponse: Equatable {
     public var reprompt: OutputSpeech?
     public var shouldEndSession: Bool
     
-    public init(outputSpeech: OutputSpeech? = nil, card: Card? = nil, reprompt: OutputSpeech? = nil, shouldEndSession: Bool) {
+    public init(outputSpeech: OutputSpeech? = nil, card: Card? = nil, reprompt: OutputSpeech? = nil, shouldEndSession: Bool = true) {
         self.outputSpeech = outputSpeech
         self.card = card
         self.reprompt = reprompt

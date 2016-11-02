@@ -15,8 +15,7 @@ class ResponseGeneratorTests: XCTestCase {
     ]
 
     func testResponseMinimal() {
-        let standardResponse = StandardResponse(shouldEndSession: true)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        let generator = ResponseGenerator(standardResponse: StandardResponse())
         
         let json = generator.generateJSONObject()
         XCTAssertEqual(json["version"] as? String, "1.0")
@@ -27,7 +26,7 @@ class ResponseGeneratorTests: XCTestCase {
     }
     
     func testSessionAttributes() {
-        let standardResponse = StandardResponse(shouldEndSession: true)
+        let standardResponse = StandardResponse()
         let sessionAttributes: [String: Any] = ["1": 1, "2": "two"]
         let generator = ResponseGenerator(standardResponse: standardResponse, sessionAttributes: sessionAttributes)
 
@@ -39,7 +38,7 @@ class ResponseGeneratorTests: XCTestCase {
     
     func testStandardResponseOutputSpeechPlain() {
         let outputSpeech = OutputSpeech.plain(text: "text")
-        let standardResponse = StandardResponse(outputSpeech: outputSpeech, shouldEndSession: true)
+        let standardResponse = StandardResponse(outputSpeech: outputSpeech)
         let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJSONObject()
@@ -52,7 +51,7 @@ class ResponseGeneratorTests: XCTestCase {
     
     func testStandardResponseCardSimple() {
         let card = Card.simple(title: "title", content: "content")
-        let standardResponse = StandardResponse(card: card, shouldEndSession: true)
+        let standardResponse = StandardResponse(card: card)
         let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJSONObject()
@@ -67,7 +66,7 @@ class ResponseGeneratorTests: XCTestCase {
     func testStandardResponseCardStandard() {
         let image = Image(smallImageUrl: URL(fileURLWithPath: "path"), largeImageUrl: URL(fileURLWithPath: "path"))
         let card = Card.standard(title: "title", text: "text", image: image)
-        let standardResponse = StandardResponse(card: card, shouldEndSession: true)
+        let standardResponse = StandardResponse(card: card)
         let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJSONObject()
@@ -82,7 +81,7 @@ class ResponseGeneratorTests: XCTestCase {
     
     func testStandardResponseRepromptPlain() {
         let outputSpeech = OutputSpeech.plain(text: "text")
-        let standardResponse = StandardResponse(reprompt: outputSpeech, shouldEndSession: true)
+        let standardResponse = StandardResponse(reprompt: outputSpeech)
         let generator = ResponseGenerator(standardResponse: standardResponse)
         
         let json = generator.generateJSONObject()
