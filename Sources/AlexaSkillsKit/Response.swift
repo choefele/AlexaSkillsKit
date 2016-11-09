@@ -21,6 +21,7 @@ public struct StandardResponse: Equatable {
     }
 }
 
+//
 public enum OutputSpeech: Equatable {
     case plain(text: String)
     
