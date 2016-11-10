@@ -81,4 +81,4 @@ _Coming soon_
 | Account Linking | |
 | Multiple Languages | partially (locale attribute supported) |
 | Response validation | |
-| Requets verification (stand-alone server) | |
+| Request verification (stand-alone server) | |
