@@ -14,7 +14,7 @@ open class RequestDispatcher {
     open func dispatch(data: Data) -> Data {
         guard let requestParser = try? RequestParser(with: data),
             let requestType = requestParser.parseRequestType() else {
-                return "{\"version\": \"1.0\", \"response\": {\"outputSpeech\": {\"type\": \"PlainText\", \"text\": \"Error parsing request\"}, \"shouldEndSession\": true }}".data(using: .utf8)!
+                return handleError("Error parsing request")
         }
 
         var response = (standardResponse: StandardResponse(), sessionAttributes: [:])
@@ -34,7 +34,7 @@ open class RequestDispatcher {
 
         let responseGenerator = ResponseGenerator(standardResponse: response.standardResponse)
         guard let jsonData = try? responseGenerator.generateJSON(options: .prettyPrinted) else {
-            return "{\"version\": \"1.0\", \"response\": {\"outputSpeech\": {\"type\": \"PlainText\", \"text\": \"Error generating response\"}, \"shouldEndSession\": true }}".data(using: .utf8)!
+            return handleError("Error generating response")
         }
         
         return jsonData
