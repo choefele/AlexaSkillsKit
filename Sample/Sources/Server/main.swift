@@ -12,14 +12,18 @@ router.get("/ping") { request, response, next in
     next()
 }
 
-router.post("/") { request, response, next in
+router.all("/") { request, response, next in
     var data = Data()
     let _ = try? request.read(into: &data)
-    
-    let requestDispatcher = RequestDispatcher(requestHandler: AlexaSkillHandler())
-    let responseData = requestDispatcher.dispatch(data: data)
-    response.send(data: responseData).status(.OK)
-    
+
+    do {
+        let requestDispatcher = RequestDispatcher(requestHandler: AlexaSkillHandler())
+        let responseData = try requestDispatcher.dispatch(data: data)
+        response.send(data: responseData).status(.OK)
+    } catch let error as RequestDispatcher.Error {
+        response.send(error.message).status(.badRequest)
+    }
+
     next()
 }
 
