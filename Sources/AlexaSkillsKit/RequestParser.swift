@@ -1,11 +1,5 @@
 import Foundation
 
-public enum RequestType {
-    case launch
-    case intent
-    case sessionEnded
-}
-
 public class RequestParser {
     public let json: Any
     

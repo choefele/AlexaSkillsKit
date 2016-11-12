@@ -1,5 +1,16 @@
 import Foundation
 
+/// Enum that discribes the type of request received.
+///
+/// - launch: Value indicating a launch request.
+/// - intent: Value indicating an intent request.
+/// - sessionEnded: Value indicating a session ended request.
+public enum RequestType {
+    case launch
+    case intent
+    case sessionEnded
+}
+
 /// `Session` contains additional context associated with a request that is
 /// maintained between request invocations.
 ///
