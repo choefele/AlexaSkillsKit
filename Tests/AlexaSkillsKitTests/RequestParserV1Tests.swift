@@ -16,7 +16,7 @@ private func createDate(year: Int, month: Int, day: Int, hour: Int, minute: Int,
     return date!
 }
 
-class RequestParserTests: XCTestCase {
+class RequestParserV1Tests: XCTestCase {
     static let allTests = [
         ("testSession", testSession),
         ("testLaunchRequest", testLaunchRequest),
@@ -24,8 +24,10 @@ class RequestParserTests: XCTestCase {
         ("testSessionEndedRequest", testSessionEndedRequest)
     ]
     
+    let parser = RequestParserV1()
+    
     func testSession() throws {
-        let parser = try RequestParser(contentsOf: createFilePath(for: "intent_request.json"))
+        try parser.update(withContentsOf: createFilePath(for: "intent_request.json"))
         
         let session = parser.parseSession()
         XCTAssertEqual(session?.isNew, false)
@@ -43,7 +45,7 @@ class RequestParserTests: XCTestCase {
     }
     
     func testLaunchRequest() throws {
-        let parser = try RequestParser(contentsOf: createFilePath(for: "launch_request.json"))
+        try parser.update(withContentsOf: createFilePath(for: "launch_request.json"))
         
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .launch)
@@ -55,7 +57,7 @@ class RequestParserTests: XCTestCase {
     }
     
     func testIntentRequest() throws {
-        let parser = try RequestParser(contentsOf: createFilePath(for: "intent_request.json"))
+        try parser.update(withContentsOf: createFilePath(for: "intent_request.json"))
         
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .intent)
@@ -71,7 +73,7 @@ class RequestParserTests: XCTestCase {
     }
     
     func testSessionEndedRequest() throws {
-        let parser = try RequestParser(contentsOf: createFilePath(for: "session_ended_request.json"))
+        try parser.update(withContentsOf: createFilePath(for: "session_ended_request.json"))
         
         let requestType = parser.parseRequestType()
         XCTAssertEqual(requestType, .sessionEnded)

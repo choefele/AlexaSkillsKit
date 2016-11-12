@@ -12,9 +12,11 @@ open class RequestDispatcher {
     }
 
     public let requestHandler: RequestHandler
+    public let requestParser: RequestParser
 
-    public init(requestHandler: RequestHandler) {
+    public init(requestHandler: RequestHandler, requestParser: RequestParser = RequestParserV1()) {
         self.requestHandler = requestHandler
+        self.requestParser = requestParser
     }
 
     /// Synchronous dispatch that waits for the request handler to 
@@ -48,7 +50,7 @@ open class RequestDispatcher {
     ///   - data: Input data.
     ///   - completion: Completion handler.
     open func dispatch(data: Data, completion: @escaping (Result) -> ()) {
-        guard let requestParser = try? RequestParser(with: data),
+        guard let _ = try? requestParser.update(with: data),
             let requestType = requestParser.parseRequestType() else {
                 completion(.failure(error: Error(message: "Error parsing request")))
                 return
