@@ -2,13 +2,13 @@ import Foundation
 import AlexaSkillsKit
 import XCTest
 
-func createFilePath(for fileName: String) -> URL {
+private func createFilePath(for fileName: String) -> URL {
     return URL(fileURLWithPath: #file)
         .deletingLastPathComponent()
         .appendingPathComponent(fileName)
 }
 
-func createDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) -> Date {
+private func createDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) -> Date {
     let components = DateComponents(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
     var gregorian = Calendar(identifier: .gregorian)
     gregorian.timeZone = TimeZone(abbreviation: "UTC")!

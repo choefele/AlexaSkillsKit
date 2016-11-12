@@ -2,7 +2,7 @@ import Foundation
 import AlexaSkillsKit
 import XCTest
 
-class FakeRequestHandler: RequestHandler {
+private class FakeRequestHandler: RequestHandler {
     var handleLaunchCalled = false
     var handleIntentCalled = false
     var handleSessionEndedCalled = false
@@ -23,18 +23,24 @@ class FakeRequestHandler: RequestHandler {
     }
 }
 
+private func createFilePath(for fileName: String) -> URL {
+    return URL(fileURLWithPath: #file)
+        .deletingLastPathComponent()
+        .appendingPathComponent(fileName)
+}
+
 class RequestDispatcherTests: XCTestCase {
     static let allTests = [
-        ("testDispatchAsyncErrorParsingRequest", testDispatchAsyncErrorParsingRequest)
+        ("testDispatchAsyncErrorParsingRequest", testDispatchAsyncErrorParsingRequest),
+        ("testDispatchAsyncIntent", testDispatchAsyncIntent)
     ]
     
-    var requestHandler: FakeRequestHandler!
+    private var requestHandler: FakeRequestHandler!
     var requestDispatcher: RequestDispatcher!
     
-    // Dispatch calls handler dispatch method
-    // Handler dispatch -> intent handler calls completion async
     // Error returned if unknown request type
     // Error returned if response invalid
+    // Test dispatch sync
     
     // How to handle error in request handler
     // Split up dispatch handling for better testing
@@ -61,6 +67,26 @@ class RequestDispatcherTests: XCTestCase {
         
         XCTAssertFalse(requestHandler.handleLaunchCalled)
         XCTAssertFalse(requestHandler.handleIntentCalled)
+        XCTAssertFalse(requestHandler.handleSessionEndedCalled)
+    }
+    
+    func testDispatchAsyncIntent() throws {
+        let data = try Data(contentsOf: createFilePath(for: "intent_request.json"))
+        
+        let testExpectation = expectation(description: #function)
+        requestDispatcher.dispatch(data: data) { response in
+            switch response {
+            case .success:
+                break
+            case .failure:
+                XCTFail()
+            }
+            testExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+        
+        XCTAssertFalse(requestHandler.handleLaunchCalled)
+        XCTAssertTrue(requestHandler.handleIntentCalled)
         XCTAssertFalse(requestHandler.handleSessionEndedCalled)
     }
 }
