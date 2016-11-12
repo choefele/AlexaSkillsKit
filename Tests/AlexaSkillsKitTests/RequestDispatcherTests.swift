@@ -26,6 +26,7 @@ private class FakeRequestHandler: RequestHandler {
 private class FakeRequestParser: RequestParser {
     public var json: Any =  [:]
     public var requestType = RequestType.launch
+    public var throwsOnUpdate = false
 
     func parseSession() -> Session? {
         return Session(isNew: false, sessionId: "", application: Application(applicationId: ""), attributes: [:], user: User(userId: ""))
@@ -48,6 +49,10 @@ private class FakeRequestParser: RequestParser {
     }
     
     public func update(with data: Data) throws {
+        if throwsOnUpdate {
+            struct Error: Swift.Error {}
+            throw Error()
+        }
     }
 }
 
@@ -83,6 +88,7 @@ class RequestDispatcherTests: XCTestCase {
     }
     
     func testDispatchAsyncErrorParsingRequest() {
+        requestParser.throwsOnUpdate = true
         let testExpectation = expectation(description: #function)
         requestDispatcher.dispatch(data: Data()) { response in
             switch response {
