@@ -24,7 +24,13 @@ class RequestParserV1Tests: XCTestCase {
         ("testSessionEndedRequest", testSessionEndedRequest)
     ]
     
-    let parser = RequestParserV1()
+    var parser: RequestParserV1!
+    
+    override func setUp() {
+        super.setUp()
+        
+        parser = RequestParserV1()
+    }
     
     func testSession() throws {
         try parser.update(withContentsOf: createFilePath(for: "intent_request.json"))

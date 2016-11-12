@@ -2,9 +2,11 @@ import Foundation
 import AlexaSkillsKit
 import XCTest
 
-class ResponseGeneratorTests: XCTestCase {
+class ResponseGeneratorV1Tests: XCTestCase {
     static let allTests = [
         ("testResponseMinimal", testResponseMinimal),
+        ("testSessionAttributes", testSessionAttributes),
+        ("testStandardResponseOutputSpeechPlain", testStandardResponseOutputSpeechPlain),
         ("testStandardResponseShouldEndSessionFalse", testStandardResponseShouldEndSessionFalse),
         ("testStandardResponseOutputSpeechPlain", testStandardResponseOutputSpeechPlain),
         ("testStandardResponseCardSimple", testStandardResponseCardSimple),
@@ -13,10 +15,16 @@ class ResponseGeneratorTests: XCTestCase {
         ("testGenerateJSONTrue", testGenerateJSONTrue),
         ("testGenerateJSONFalse", testGenerateJSONFalse)
     ]
+    
+    var generator: ResponseGeneratorV1!
+    
+    override func setUp() {
+        super.setUp()
+        
+        generator = ResponseGeneratorV1()
+    }
 
     func testResponseMinimal() {
-        let generator = ResponseGenerator(standardResponse: StandardResponse())
-        
         let json = generator.generateJSONObject()
         XCTAssertEqual(json["version"] as? String, "1.0")
 
@@ -28,7 +36,7 @@ class ResponseGeneratorTests: XCTestCase {
     func testSessionAttributes() {
         let standardResponse = StandardResponse()
         let sessionAttributes: [String: Any] = ["1": 1, "2": "two"]
-        let generator = ResponseGenerator(standardResponse: standardResponse, sessionAttributes: sessionAttributes)
+        generator.update(standardResponse: standardResponse, sessionAttributes: sessionAttributes)
 
         let json = generator.generateJSONObject()
         let jsonSessionAttributes = json["sessionAttributes"] as? [String: Any]
@@ -39,7 +47,7 @@ class ResponseGeneratorTests: XCTestCase {
     func testStandardResponseOutputSpeechPlain() {
         let outputSpeech = OutputSpeech.plain(text: "text")
         let standardResponse = StandardResponse(outputSpeech: outputSpeech)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        generator.update(standardResponse: standardResponse, sessionAttributes: [:])
         
         let json = generator.generateJSONObject()
         let jsonResponse = json["response"] as? [String: Any]
@@ -52,7 +60,7 @@ class ResponseGeneratorTests: XCTestCase {
     func testStandardResponseCardSimple() {
         let card = Card.simple(title: "title", content: "content")
         let standardResponse = StandardResponse(card: card)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        generator.update(standardResponse: standardResponse, sessionAttributes: [:])
         
         let json = generator.generateJSONObject()
         let jsonResponse = json["response"] as? [String: Any]
@@ -67,7 +75,7 @@ class ResponseGeneratorTests: XCTestCase {
         let image = Image(smallImageUrl: URL(fileURLWithPath: "path"), largeImageUrl: URL(fileURLWithPath: "path"))
         let card = Card.standard(title: "title", text: "text", image: image)
         let standardResponse = StandardResponse(card: card)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        generator.update(standardResponse: standardResponse, sessionAttributes: [:])
         
         let json = generator.generateJSONObject()
         let jsonResponse = json["response"] as? [String: Any]
@@ -82,7 +90,7 @@ class ResponseGeneratorTests: XCTestCase {
     func testStandardResponseRepromptPlain() {
         let outputSpeech = OutputSpeech.plain(text: "text")
         let standardResponse = StandardResponse(reprompt: outputSpeech)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        generator.update(standardResponse: standardResponse, sessionAttributes: [:])
         
         let json = generator.generateJSONObject()
         let jsonResponse = json["response"] as? [String: Any]
@@ -95,7 +103,7 @@ class ResponseGeneratorTests: XCTestCase {
 
     func testStandardResponseShouldEndSessionTrue() {
         let standardResponse = StandardResponse(shouldEndSession: true)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        generator.update(standardResponse: standardResponse, sessionAttributes: [:])
         
         let json = generator.generateJSONObject()
         let jsonResponse = json["response"] as? [String: Any]
@@ -104,7 +112,7 @@ class ResponseGeneratorTests: XCTestCase {
     
     func testStandardResponseShouldEndSessionFalse() {
         let standardResponse = StandardResponse(shouldEndSession: false)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        generator.update(standardResponse: standardResponse, sessionAttributes: [:])
         
         let json = generator.generateJSONObject()
         let jsonResponse = json["response"] as? [String: Any]
@@ -118,7 +126,7 @@ class ResponseGeneratorTests: XCTestCase {
     func testGenerateJSONTrue() {
         // JSONSerialization bug with Bools: https://bugs.swift.org/browse/SR-3013
         let standardResponse = StandardResponse(shouldEndSession: true)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        generator.update(standardResponse: standardResponse, sessionAttributes: [:])
 
         if true {
             let jsonData = try? generator.generateJSON()
@@ -136,7 +144,7 @@ class ResponseGeneratorTests: XCTestCase {
     func testGenerateJSONFalse() {
         // JSONSerialization bug with Bools: https://bugs.swift.org/browse/SR-3013
         let standardResponse = StandardResponse(shouldEndSession: false)
-        let generator = ResponseGenerator(standardResponse: standardResponse)
+        generator.update(standardResponse: standardResponse, sessionAttributes: [:])
 
         if true {
             let jsonData = try? generator.generateJSON()

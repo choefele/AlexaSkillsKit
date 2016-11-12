@@ -7,7 +7,7 @@ XCTMain([
     testCase(RequestDispatcherTests.allTests),
     testCase(RequestParserV1Tests.allTests),
     testCase(RequestTests.allTests),
-    testCase(ResponseGeneratorTests.allTests),
+    testCase(ResponseGeneratorV1Tests.allTests),
     testCase(ResponseTests.allTests)
 ])
 #endif

@@ -13,10 +13,12 @@ open class RequestDispatcher {
 
     public let requestHandler: RequestHandler
     public let requestParser: RequestParser
+    public let responseGenerator: ResponseGenerator
 
-    public init(requestHandler: RequestHandler, requestParser: RequestParser = RequestParserV1()) {
+    public init(requestHandler: RequestHandler, requestParser: RequestParser = RequestParserV1(), responseGenerator: ResponseGenerator = ResponseGeneratorV1()) {
         self.requestHandler = requestHandler
         self.requestParser = requestParser
+        self.responseGenerator = responseGenerator
     }
 
     /// Synchronous dispatch that waits for the request handler to 
@@ -65,8 +67,8 @@ open class RequestDispatcher {
             }
 
             requestHandler.handleIntent(request: intentRequest, session: session, next: { standardResponse in
-                let responseGenerator = ResponseGenerator(standardResponse: standardResponse)
-                guard let jsonData = try? responseGenerator.generateJSON(options: .prettyPrinted) else {
+                self.responseGenerator.update(standardResponse: standardResponse, sessionAttributes: [:])
+                guard let jsonData = try? self.responseGenerator.generateJSON(options: .prettyPrinted) else {
                     completion(.failure(error: Error(message: "Error generating response")))
                     return
                 }
