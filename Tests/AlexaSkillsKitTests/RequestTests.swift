@@ -7,7 +7,8 @@ class RequestTests: XCTestCase {
         ("testSession", testSession),
         ("testLaunchRequest", testLaunchRequest),
         ("testIntentRequest", testIntentRequest),
-        ("testSessionEndedRequest", testSessionEndedRequest)
+        ("testSessionEndedRequest", testSessionEndedRequest),
+        ("testBuiltInIntent", testBuiltInIntent)
     ]
     
     func testSession() {
@@ -43,11 +44,6 @@ class RequestTests: XCTestCase {
         XCTAssertNotEqual(intentRequest, IntentRequest(request: request1, intent: intent))
     }
     
-    func testBuiltInIntent() {
-        let intent = Intent(name: "AMAZON.YesIntent")
-        XCTAssertEqual(intent.name, BuiltInIntent.yes.rawValue)
-    }
-    
     func testSessionEndedRequest() {
         let request0 = Request(requestId: "requestId", timestamp: Date(), locale: Locale(identifier: "identifier"))
         let reason: Reason = .error(Error(type: .invalidResponse, message: "message"))
@@ -57,5 +53,10 @@ class RequestTests: XCTestCase {
 
         let request1 = Request(requestId: "x", timestamp: Date(), locale: Locale(identifier: "x"))
         XCTAssertNotEqual(sessionEndedRequest, SessionEndedRequest(request: request1, reason: reason))
+    }
+    
+    func testBuiltInIntent() {
+        let intent = Intent(name: "AMAZON.YesIntent")
+        XCTAssertEqual(intent.name, BuiltInIntent.yes.rawValue)
     }
 }
