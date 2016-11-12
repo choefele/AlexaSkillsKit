@@ -136,4 +136,23 @@ class RequestDispatcherTests: XCTestCase {
         XCTAssertTrue(requestHandler.handleIntentCalled)
         XCTAssertFalse(requestHandler.handleSessionEndedCalled)
     }
+    
+    func testDispatchAsyncSessionEnded() throws {
+        requestParser.requestType = .sessionEnded
+        let testExpectation = expectation(description: #function)
+        requestDispatcher.dispatch(data: Data()) { response in
+            switch response {
+            case .success:
+                break
+            case .failure:
+                XCTFail()
+            }
+            testExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+        
+        XCTAssertFalse(requestHandler.handleLaunchCalled)
+        XCTAssertFalse(requestHandler.handleIntentCalled)
+        XCTAssertTrue(requestHandler.handleSessionEndedCalled)
+    }
 }

@@ -1,7 +1,7 @@
 import Foundation
 
 public class ResponseGeneratorV1: ResponseGenerator {
-    public var standardResponse: StandardResponse
+    public var standardResponse: StandardResponse?
     public var sessionAttributes: [String: Any]
     
     public init(standardResponse: StandardResponse = StandardResponse(), sessionAttributes: [String: Any] = [:]) {
@@ -13,7 +13,7 @@ public class ResponseGeneratorV1: ResponseGenerator {
         var json: [String: Any] = ["version": "1.0"]
         
         json["sessionAttributes"] = sessionAttributes.isEmpty ? nil : sessionAttributes
-        json["response"] = ResponseGeneratorV1.generateStandardResponse(standardResponse)
+        json["response"] = standardResponse.map{ ResponseGeneratorV1.generateStandardResponse($0) }
         
         return json
     }

@@ -34,9 +34,8 @@ class ResponseGeneratorV1Tests: XCTestCase {
     }
     
     func testSessionAttributes() {
-        let standardResponse = StandardResponse()
         let sessionAttributes: [String: Any] = ["1": 1, "2": "two"]
-        generator.update(standardResponse: standardResponse, sessionAttributes: sessionAttributes)
+        generator.update(standardResponse: nil, sessionAttributes: sessionAttributes)
 
         let json = generator.generateJSONObject()
         let jsonSessionAttributes = json["sessionAttributes"] as? [String: Any]
