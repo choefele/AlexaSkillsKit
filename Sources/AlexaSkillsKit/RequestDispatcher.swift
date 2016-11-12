@@ -47,14 +47,13 @@ open class RequestDispatcher {
     /// - Parameters:
     ///   - data: Input data.
     ///   - completion: Completion handler.
-    open func dispatch(data: Data, completion:(Result) -> ()) {
+    open func dispatch(data: Data, completion: @escaping (Result) -> ()) {
         guard let requestParser = try? RequestParser(with: data),
             let requestType = requestParser.parseRequestType() else {
                 completion(.failure(error: Error(message: "Error parsing request")))
                 return
         }
 
-        var response = (standardResponse: StandardResponse(), sessionAttributes: [:])
         switch requestType {
         case .intent:
             guard let intentRequest = requestParser.parseIntentRequest(),
@@ -63,19 +62,17 @@ open class RequestDispatcher {
                 return
             }
 
-            requestHandler.handleIntent(request: intentRequest, session: session, next: { (standardResponse) in
-                response = (standardResponse, [:])
+            requestHandler.handleIntent(request: intentRequest, session: session, next: { standardResponse in
+                let responseGenerator = ResponseGenerator(standardResponse: standardResponse)
+                guard let jsonData = try? responseGenerator.generateJSON(options: .prettyPrinted) else {
+                    completion(.failure(error: Error(message: "Error generating response")))
+                    return
+                }
+                
+                completion(.success(data: jsonData))
             })
         default:
-            response = (StandardResponse(), [:])
+            completion(.failure(error: Error(message: "Unknow request type")))
         }
-
-        let responseGenerator = ResponseGenerator(standardResponse: response.standardResponse)
-        guard let jsonData = try? responseGenerator.generateJSON(options: .prettyPrinted) else {
-            completion(.failure(error: Error(message: "Error generating response")))
-            return
-        }
-        
-        completion(.success(data: jsonData))
     }
 }

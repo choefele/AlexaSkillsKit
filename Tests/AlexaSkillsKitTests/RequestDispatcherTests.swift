@@ -36,6 +36,9 @@ class RequestDispatcherTests: XCTestCase {
     // Error returned if unknown request type
     // Error returned if response invalid
     
+    // How to handle error in request handler
+    // Split up dispatch handling for better testing
+    
     override func setUp() {
         super.setUp()
         
