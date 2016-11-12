@@ -3,6 +3,9 @@ import Foundation
 public protocol RequestParser: class {
     var json: Any {get set}
     
+    func update(withContentsOf url: URL) throws
+    func update(with data: Data) throws
+    
     func parseSession() -> Session?
     func parseRequestType() -> RequestType?
     func parseLaunchRequest() -> LaunchRequest?

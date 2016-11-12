@@ -4,7 +4,10 @@ public protocol ResponseGenerator: class {
     var standardResponse: StandardResponse {get set}
     var sessionAttributes: [String: Any] {get set}
     
+    func update(standardResponse: StandardResponse, sessionAttributes: [String: Any])
+    
     func generateJSONObject() -> [String: Any]
+    func generateJSON(options: JSONSerialization.WritingOptions) throws -> Data
 }
 
 public extension ResponseGenerator {

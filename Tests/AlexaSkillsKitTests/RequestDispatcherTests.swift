@@ -23,6 +23,34 @@ private class FakeRequestHandler: RequestHandler {
     }
 }
 
+private class FakeRequestParser: RequestParser {
+    public var json: Any =  [:]
+    public var requestType = RequestType.launch
+
+    func parseSession() -> Session? {
+        return Session(isNew: false, sessionId: "", application: Application(applicationId: ""), attributes: [:], user: User(userId: ""))
+    }
+    
+    func parseRequestType() -> RequestType? {
+        return requestType
+    }
+    
+    func parseLaunchRequest() -> LaunchRequest? {
+        return LaunchRequest(request: Request(requestId: "", timestamp: Date(), locale: Locale(identifier: "")))
+    }
+    
+    func parseIntentRequest() -> IntentRequest? {
+        return IntentRequest(request: Request(requestId: "", timestamp: Date(), locale: Locale(identifier: "")), intent: Intent(name: ""))
+    }
+    
+    func parseSessionEndedRequest() -> SessionEndedRequest? {
+        return SessionEndedRequest(request: Request(requestId: "", timestamp: Date(), locale: Locale(identifier: "")), reason: Reason.unknown)
+    }
+    
+    public func update(with data: Data) throws {
+    }
+}
+
 private func createFilePath(for fileName: String) -> URL {
     return URL(fileURLWithPath: #file)
         .deletingLastPathComponent()
@@ -36,6 +64,7 @@ class RequestDispatcherTests: XCTestCase {
     ]
     
     private var requestHandler: FakeRequestHandler!
+    private var requestParser: FakeRequestParser!
     var requestDispatcher: RequestDispatcher!
     
     // Error returned if unknown request type
@@ -49,7 +78,8 @@ class RequestDispatcherTests: XCTestCase {
         super.setUp()
         
         requestHandler = FakeRequestHandler()
-        requestDispatcher = RequestDispatcher(requestHandler: requestHandler)
+        requestParser = FakeRequestParser()
+        requestDispatcher = RequestDispatcher(requestHandler: requestHandler, requestParser: requestParser)
     }
     
     func testDispatchAsyncErrorParsingRequest() {
@@ -71,10 +101,9 @@ class RequestDispatcherTests: XCTestCase {
     }
     
     func testDispatchAsyncIntent() throws {
-        let data = try Data(contentsOf: createFilePath(for: "intent_request.json"))
-        
+        requestParser.requestType = .intent
         let testExpectation = expectation(description: #function)
-        requestDispatcher.dispatch(data: data) { response in
+        requestDispatcher.dispatch(data: Data()) { response in
             switch response {
             case .success:
                 break
