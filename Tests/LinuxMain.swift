@@ -4,9 +4,10 @@ import XCTest
 @testable import AlexaSkillsKitTests
 
 XCTMain([
-       testCase(RequestParserTests.allTests),
-       testCase(RequestTests.allTests),
-       testCase(ResponseGeneratorTests.allTests),
-       testCase(ResponseTests.allTests)
+    testCase(RequestDispatcherTests.allTests),
+    testCase(RequestParserTests.allTests),
+    testCase(RequestTests.allTests),
+    testCase(ResponseGeneratorTests.allTests),
+    testCase(ResponseTests.allTests)
 ])
 #endif
