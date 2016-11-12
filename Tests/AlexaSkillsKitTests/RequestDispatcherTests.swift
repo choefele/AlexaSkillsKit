@@ -71,14 +71,7 @@ class RequestDispatcherTests: XCTestCase {
     private var requestHandler: FakeRequestHandler!
     private var requestParser: FakeRequestParser!
     var requestDispatcher: RequestDispatcher!
-    
-    // Error returned if unknown request type
-    // Error returned if response invalid
-    // Test dispatch sync
-    
-    // How to handle error in request handler
-    // Split up dispatch handling for better testing
-    
+        
     override func setUp() {
         super.setUp()
         
@@ -102,6 +95,25 @@ class RequestDispatcherTests: XCTestCase {
         waitForExpectations(timeout: 1)
         
         XCTAssertFalse(requestHandler.handleLaunchCalled)
+        XCTAssertFalse(requestHandler.handleIntentCalled)
+        XCTAssertFalse(requestHandler.handleSessionEndedCalled)
+    }
+    
+    func testDispatchAsyncLaunch() throws {
+        requestParser.requestType = .launch
+        let testExpectation = expectation(description: #function)
+        requestDispatcher.dispatch(data: Data()) { response in
+            switch response {
+            case .success:
+                break
+            case .failure:
+                XCTFail()
+            }
+            testExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+        
+        XCTAssertTrue(requestHandler.handleLaunchCalled)
         XCTAssertFalse(requestHandler.handleIntentCalled)
         XCTAssertFalse(requestHandler.handleSessionEndedCalled)
     }

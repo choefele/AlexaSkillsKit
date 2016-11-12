@@ -59,24 +59,41 @@ open class RequestDispatcher {
         }
 
         switch requestType {
+        case .launch:
+            guard let launchRequest = requestParser.parseLaunchRequest(),
+                let session = requestParser.parseSession() else {
+                    completion(.failure(error: Error(message: "Error parsing launch request")))
+                    return
+            }
+            
+            requestHandler.handleLaunch(request: launchRequest, session: session, next: { standardResponse in
+                self.generateResponse(standardResponse: standardResponse, completion: completion)
+            })
+            
         case .intent:
             guard let intentRequest = requestParser.parseIntentRequest(),
                 let session = requestParser.parseSession() else {
-                completion(.failure(error: Error(message: "Error parsing intent")))
+                completion(.failure(error: Error(message: "Error parsing intent request")))
                 return
             }
 
             requestHandler.handleIntent(request: intentRequest, session: session, next: { standardResponse in
-                self.responseGenerator.update(standardResponse: standardResponse, sessionAttributes: [:])
-                guard let jsonData = try? self.responseGenerator.generateJSON(options: .prettyPrinted) else {
-                    completion(.failure(error: Error(message: "Error generating response")))
-                    return
-                }
-                
-                completion(.success(data: jsonData))
+                self.generateResponse(standardResponse: standardResponse, completion: completion)
             })
         default:
             completion(.failure(error: Error(message: "Unknow request type")))
         }
+    }
+}
+
+extension RequestDispatcher {
+    func generateResponse(standardResponse: StandardResponse, completion: (Result) -> ()) -> () {
+        responseGenerator.update(standardResponse: standardResponse, sessionAttributes: [:])
+        guard let jsonData = try? responseGenerator.generateJSON(options: .prettyPrinted) else {
+            completion(.failure(error: Error(message: "Error generating response")))
+            return
+        }
+        
+        completion(.success(data: jsonData))
     }
 }
