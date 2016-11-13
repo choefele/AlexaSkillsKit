@@ -2,15 +2,6 @@ import Foundation
 import Dispatch
 
 open class RequestDispatcher {
-    public struct Error: Swift.Error {
-        public let message: String
-    }
-
-    public enum Result {
-        case success(data: Data)
-        case failure(error: Error)
-    }
-
     public let requestHandler: RequestHandler
     public let requestParser: RequestParser
     public let responseGenerator: ResponseGenerator
@@ -28,7 +19,7 @@ open class RequestDispatcher {
     /// - Returns: Output data.
     /// - Throws: Error.
     open func dispatch(data: Data) throws -> Data {
-        var dispatchResult = Result.failure(error: Error(message: "Error waiting for result"))
+        var dispatchResult = Result<Data>.failure(MessageError(message: "Error waiting for result"))
 
         let dispatchSemaphore = DispatchSemaphore(value: 1)
         dispatch(data: data) { result in
@@ -51,10 +42,10 @@ open class RequestDispatcher {
     /// - Parameters:
     ///   - data: Input data.
     ///   - completion: Completion handler.
-    open func dispatch(data: Data, completion: @escaping (Result) -> ()) {
+    open func dispatch(data: Data, completion: @escaping (Result<Data>) -> ()) {
         guard let _ = try? requestParser.update(with: data),
             let requestType = requestParser.parseRequestType() else {
-                completion(.failure(error: Error(message: "Error parsing request")))
+                completion(.failure(MessageError(message: "Error parsing request")))
                 return
         }
 
@@ -62,47 +53,65 @@ open class RequestDispatcher {
         case .launch:
             guard let launchRequest = requestParser.parseLaunchRequest(),
                 let session = requestParser.parseSession() else {
-                    completion(.failure(error: Error(message: "Error parsing launch request")))
+                    completion(.failure(MessageError(message: "Error parsing launch request")))
                     return
             }
             
-            requestHandler.handleLaunch(request: launchRequest, session: session, next: { standardResponse in
-                self.generateResponse(standardResponse: standardResponse, sessionAttributes: [:], completion: completion)
+            requestHandler.handleLaunch(request: launchRequest, session: session, next: { result in
+                self.handleResponse(result: result, completion: completion)
             })
             
         case .intent:
             guard let intentRequest = requestParser.parseIntentRequest(),
                 let session = requestParser.parseSession() else {
-                completion(.failure(error: Error(message: "Error parsing intent request")))
+                completion(.failure(MessageError(message: "Error parsing intent request")))
                 return
             }
 
-            requestHandler.handleIntent(request: intentRequest, session: session, next: { standardResponse in
-                self.generateResponse(standardResponse: standardResponse, sessionAttributes: [:], completion: completion)
+            requestHandler.handleIntent(request: intentRequest, session: session, next: { result in
+                self.handleResponse(result: result, completion: completion)
             })
         
         case .sessionEnded:
             guard let sessionEndedRequest = requestParser.parseSessionEndedRequest(),
                 let session = requestParser.parseSession() else {
-                    completion(.failure(error: Error(message: "Error parsing session ended request")))
+                    completion(.failure(MessageError(message: "Error parsing session ended request")))
                     return
             }
             
-            requestHandler.handleSessionEnded(request: sessionEndedRequest, session: session, next: {
-                self.generateResponse(standardResponse: nil, sessionAttributes: [:], completion: completion)
+            requestHandler.handleSessionEnded(request: sessionEndedRequest, session: session, next: { result in
+                self.handleResponse(result: result, completion: completion)
             })
         }
     }
 }
 
 extension RequestDispatcher {
-    func generateResponse(standardResponse: StandardResponse?, sessionAttributes: [String: Any], completion: (Result) -> ()) -> () {
+    func handleResponse(result: StandardResult, completion: (Result<Data>) -> ()) -> () {
+        switch result {
+        case .success(let result):
+            generateResponse(standardResponse: result.standardResponse, sessionAttributes: result.sessionAttributes, completion: completion)
+        default:
+            completion(.failure(MessageError(message: "Error handling request")))
+        }
+    }
+    
+    func handleResponse(result: VoidResult, completion: (Result<Data>) -> ()) -> () {
+        switch result {
+        case .success:
+            generateResponse(standardResponse: nil, sessionAttributes: [:], completion: completion)
+        default:
+            completion(.failure(MessageError(message: "Error handling request")))
+        }
+    }
+    
+    func generateResponse(standardResponse: StandardResponse?, sessionAttributes: [String: Any], completion: (Result<Data>) -> ()) -> () {
         responseGenerator.update(standardResponse: standardResponse, sessionAttributes: sessionAttributes)
         guard let jsonData = try? responseGenerator.generateJSON(options: .prettyPrinted) else {
-            completion(.failure(error: Error(message: "Error generating response")))
+            completion(.failure(MessageError(message: "Error generating response")))
             return
         }
         
-        completion(.success(data: jsonData))
+        completion(.success(jsonData))
     }
 }

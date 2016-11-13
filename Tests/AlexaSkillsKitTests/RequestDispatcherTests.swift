@@ -7,19 +7,19 @@ private class FakeRequestHandler: RequestHandler {
     var handleIntentCalled = false
     var handleSessionEndedCalled = false
     
-    func handleLaunch(request: LaunchRequest, session: Session, next: @escaping (StandardResponse) -> ()) {
+    func handleLaunch(request: LaunchRequest, session: Session, next: @escaping (StandardResult) -> ()) {
         handleLaunchCalled = true
-        next(StandardResponse())
+        next(.success(standardResponse: StandardResponse(), sessionAttributes: [String: Any]()))
     }
     
-    func handleIntent(request: IntentRequest, session: Session, next: @escaping (StandardResponse) -> ()) {
+    func handleIntent(request: IntentRequest, session: Session, next: @escaping (StandardResult) -> ()) {
         handleIntentCalled = true
-        next(StandardResponse())
+        next(.success(standardResponse: StandardResponse(), sessionAttributes: [String: Any]()))
     }
     
-    func handleSessionEnded(request: SessionEndedRequest, session: Session, next: @escaping () -> ()) {
+    func handleSessionEnded(request: SessionEndedRequest, session: Session, next: @escaping (VoidResult) -> ()) {
         handleSessionEndedCalled = true
-        next()
+        next(.success())
     }
 }
 
