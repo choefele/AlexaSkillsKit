@@ -25,7 +25,6 @@ const spawnSync = require('child_process').spawnSync;
      
 */
 exports.handler = (event, context, callback) => {
-
     const options = {
         cwd: 'native/',
         env: {
@@ -34,11 +33,9 @@ exports.handler = (event, context, callback) => {
         input:JSON.stringify(event)
     };
 
-
     var command = '';
 
-    if (event.command) 
-    {
+    if (event.command) {
         command = event.command;
     } else {
         command = './Lambda';
