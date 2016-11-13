@@ -55,11 +55,14 @@ exports.handler = (event, context, callback) => {
     console.error(stderr);
     
     if (error) {
-        callback(error,null);
-    }
-    else {
-        // executable's raw stdout is the Lambda output
-        var response = JSON.parse(stdout);
-        callback(null,response);
+        callback(error, null);
+    } else {
+        try {
+            // Executable's raw stdout is the Lambda output
+            var response = JSON.parse(stdout);
+            callback(null, response);
+        } catch(e) {
+            callback(e, null);
+        }
     }
 };
