@@ -9,6 +9,8 @@ It's early days – expect API changes until we reach 1.0!
 
 ## Implementing a Custom Alexa Skill
 
+Start with implementing the `RequestHandler` protocol. AlexaSkillsKit parses requests from Alexa and passes the data on to methods required by this protocol. For example, a [launch request](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-standard-request-types-reference#launchrequest) would result in AlexaSkillsKit calling the `handleLaunch()` method.
+
 ```
 import Foundation
 import AlexaSkillsKit
@@ -37,13 +39,17 @@ public class AlexaSkillHandler : RequestHandler {
 }
 ```
 
+In the request handler, your custom skill can implement any logic your skill requires. To enable asynchronous code (for example calling another HTTP service), the result is passed on via the `next` callback. `next` takes a enum that's either `.success` and contains an Alexa response or `.failure` in case a problem occurred.
+
 ## Deployment
 
-Your custom skill works on AWS Lambda using an Alexa Skills Kit trigger, but also as part of any other Swift server environment via Alexa's HTTPS API. 
+You can run your custom skill on AWS Lambda using an [Alexa Skills Kit trigger](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-lambda-function) as well as on any other Swift server environment via [Alexa's HTTPS API](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-web-service). 
 
-Using Lambda, Amazon will take care of scaling and running your code. Lambda, however, doesn't support Swift executables natively thus the sample comes with a Node.js shim that executes a Swift executable. 
+Using Lambda, Amazon will take care of scaling and running your Swift code. Lambda, however, doesn't support Swift executables natively thus the sample comes with a script that packages your Swift executable and its dependencies so it can be executed as a Node.js Lambda function.
 
-A stand-alone server allows you to use alternate cloud providers and run multiple skills on the same server using any Swift web framework such as [Kitura](https://github.com/IBM-Swift/Kitura), [Vapor](https://github.com/vapor/vapor) or [Perfect](https://github.com/PerfectlySoft/Perfect).
+A stand-alone server allows you to use alternate cloud providers and run multiple skills on the same server using any Swift web framework such as [Kitura](https://github.com/IBM-Swift/Kitura), [Vapor](https://github.com/vapor/vapor) or [Perfect](https://github.com/PerfectlySoft/Perfect). 
+
+Even if you use Lambda for execution, having a server allows you easily run and debug your custom skill in Xcode on a local computer. For this reason, the sample is configured to build both a Lambda executable as well as an HTTP server. You can use the same `RequestHandler` code in both cases.
 
 ### Lambda
 
