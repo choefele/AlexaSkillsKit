@@ -49,11 +49,27 @@ Using Lambda, Amazon will take care of scaling and running your Swift code. Lamb
 
 A stand-alone server allows you to use alternate cloud providers and run multiple skills on the same server using any Swift web framework such as [Kitura](https://github.com/IBM-Swift/Kitura), [Vapor](https://github.com/vapor/vapor) or [Perfect](https://github.com/PerfectlySoft/Perfect). 
 
-Even if you use Lambda for execution, having a server allows you easily run and debug your custom skill in Xcode on a local computer. For this reason, the sample is configured to build both a Lambda executable as well as an HTTP server. You can use the same `RequestHandler` code in both cases.
+Even if you use Lambda for execution, configuring a server allows you to easily run and debug your custom skill in Xcode on a local computer. For this reason, the sample is configured to build both a Lambda executable as well as an HTTP server. You can use the same `RequestHandler` code in both cases.
 
 ### Lambda
 
-A sample for a custom skill using Lambda is provided in [Samples/Lambda](https://github.com/choefele/AlexaSkillsKit/tree/master/Samples/Lambda). You'll need [Xcode 8](https://developer.apple.com/xcode/) and [docker](https://www.docker.com/products/overview) to build it.
+```
+import Foundation
+import AlexaSkillsKit
+import AlexaSkill
+
+do {
+    let data = FileHandle.standardInput.readDataToEndOfFile()
+    let requestDispatcher = RequestDispatcher(requestHandler: AlexaSkillHandler())
+    let responseData = try requestDispatcher.dispatch(data: data)
+    FileHandle.standardOutput.write(responseData)
+} catch let error as MessageError {
+    let data = error.message.data(using: .utf8) ?? Data()
+    FileHandle.standardOutput.write(data)
+}
+```
+
+A sample for a custom skill using Lambda is provided in [Samples](https://github.com/choefele/AlexaSkillsKit/tree/master/Samples). You'll need [Xcode 8](https://developer.apple.com/xcode/) and [docker](https://www.docker.com/products/overview) to build it.
 
 - Make sure the sample builds by running `swift build`. This will install AlexaSkillsKit in the Packages folder and build the executable for macOS
 - Lambda executables take their input via `stdin` and provide output via `stdout` – you can try this out by piping a test file into the executable `swift build && cat ../../Tests/AlexaSkillsKitTests/launch_request.json | ./.build/debug/Lambda`
@@ -77,6 +93,33 @@ Now you can test the skill in the Alexa Console using the utterance "test swift"
 
 ### Stand-Alone Server
 _Coming soon_
+
+```
+import Foundation
+import AlexaSkillsKit
+import AlexaSkill
+import Kitura
+
+router.all("/") { request, response, next in
+    var data = Data()
+    let _ = try? request.read(into: &data)
+
+    let requestDispatcher = RequestDispatcher(requestHandler: AlexaSkillHandler())
+    requestDispatcher.dispatch(data: data) { result in
+        switch result {
+        case .success(let data):
+            response.send(data: data).status(.OK)
+        case .failure(let error):
+            response.send(error.message).status(.badRequest)
+        }
+        
+        next()
+    }
+}
+
+Kitura.addHTTPServer(onPort: 8090, with: router)
+Kitura.run()
+```
 
 ## Supported Features
 ### Request Envelope
