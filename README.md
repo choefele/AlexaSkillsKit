@@ -177,7 +177,7 @@ You can use the same Swift server on a remote machine as the backend for your cu
 ### Other
 | Feature | Supported |
 | --- | --- |
-| Request handler | |
+| Request handler | yes |
 | Account Linking | |
 | Multiple Languages | partially (locale attribute supported) |
 | Response validation | |
