@@ -49,7 +49,7 @@ Using Lambda, Amazon will take care of scaling and running your Swift code. Lamb
 
 A stand-alone server allows you to use alternate cloud providers and run multiple skills on the same server using any Swift web framework such as [Kitura](https://github.com/IBM-Swift/Kitura), [Vapor](https://github.com/vapor/vapor) or [Perfect](https://github.com/PerfectlySoft/Perfect). Even if you use Lambda for execution, configuring a server allows you to easily run and debug your custom skill in Xcode on a local computer. 
 
-A sample for a custom skill using Lambda and an HTTP server is provided in the [Samples folder](https://github.com/choefele/AlexaSkillsKit/tree/master/Samples). You'll need [Xcode 8](https://developer.apple.com/xcode/) and [docker](https://www.docker.com/products/overview) to build it as well as [ngrok](https://ngrok.com) if you want your custom skill locally.
+A sample for a custom skill using Lambda and an HTTP server is provided in the [Samples folder](https://github.com/choefele/AlexaSkillsKit/tree/master/Samples). You'll need [Xcode 8](https://developer.apple.com/xcode/) and [docker](https://www.docker.com/products/overview) to build it as well as [ngrok](https://ngrok.com) if you want to test your custom skill locally.
 
 ### Lambda
 
@@ -94,7 +94,7 @@ Now you can test the skill in the Alexa Console using the utterance "test swift"
 
 ### Stand-Alone Server
 
-Invocation of a `RequestHandler` as part of a Swift server is done via Amazon's HTTPS API where the Alexa service calls your server with a POST request. In the following code, Kitura is used as a web framework but any other web framework would work equally well.
+Invocation of a `RequestHandler` as part of a Swift server is done via Amazon's HTTPS API where the Alexa service calls your server with a POST request. In the following code, Kitura is used as a web framework but any other web framework would work equally well:
 
 ```
 import Foundation
@@ -138,7 +138,7 @@ To run a local HTTPS server:
  
 Now you can test the skill in the Alexa Console using the utterance "test swift". This will call your local HTTP server allowing you to modify and debug your code with the Alexa service.
 
-You can use the same Swift server on a remote machine to as the backend for your custom skill. Please check [Amazon's additional requirements](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-web-service#requirements-for-your-web-service) for this type of deployment.
+You can use the same Swift server on a remote machine as the backend for your custom skill. Please check [Amazon's additional requirements](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-web-service#requirements-for-your-web-service) for this type of deployment.
 
 ## Supported Features
 ### Request Envelope
