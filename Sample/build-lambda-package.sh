@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SWIFT_VERSION=3.0.1
+SWIFT_VERSION=$(<../.swift-version)
 
 # Build Swift executable
 docker run \
