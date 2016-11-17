@@ -28,7 +28,6 @@ exports.handler = (event, context, callback) => {
     const options = {
         cwd: 'native/',
         env: {
-            LD_LIBRARY_PATH: 'LinuxLibraries'
         },
         input:JSON.stringify(event)
     };
@@ -38,10 +37,10 @@ exports.handler = (event, context, callback) => {
     if (event.command) {
         command = event.command;
     } else {
-        command = './Lambda';
+        command = 'LinuxLibraries/ld-linux-x86-64.so.2';
     }
   
-    const childObject = spawnSync(command, [], options)
+    const childObject = spawnSync(command, ["--library-path", "LinuxLibraries", "./Lambda"], options)
 
     var error = childObject.error;
     var stdout = childObject.stdout.toString('utf8');
