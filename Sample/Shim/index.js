@@ -42,10 +42,6 @@ exports.handler = (event, context, callback) => {
     var stdout = childObject.stdout.toString('utf8');
     var stderr = childObject.stderr.toString('utf8');
 
-    // Log process stdout and stderr
-    console.log(stdout);
-    console.error(stderr);
-    
     if (error) {
         callback(error, null);
     } else {
