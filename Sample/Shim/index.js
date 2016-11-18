@@ -26,21 +26,17 @@ const spawnSync = require('child_process').spawnSync;
 */
 exports.handler = (event, context, callback) => {
     const options = {
-        cwd: 'native/',
-        env: {
-        },
         input:JSON.stringify(event)
     };
 
     var command = '';
-
     if (event.command) {
         command = event.command;
     } else {
-        command = 'LinuxLibraries/ld-linux-x86-64.so.2';
+        command = 'libraries/ld-linux-x86-64.so.2';
     }
   
-    const childObject = spawnSync(command, ["--library-path", "LinuxLibraries", "./Lambda"], options)
+    const childObject = spawnSync(command, ["--library-path", "libraries", "./Lambda"], options)
 
     var error = childObject.error;
     var stdout = childObject.stdout.toString('utf8');
