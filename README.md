@@ -1,3 +1,7 @@
+<p align="center" >
+  <img src="https://raw.githubusercontent.com/choefele/AlexaSkillsKit/master/alexa%2Bswift.png" alt="Swift + Docker" title="Swift + Docker">
+</p>
+
 # AlexaSkillsKit
 [![Build Status](https://travis-ci.org/choefele/AlexaSkillsKit.svg?branch=master)](https://travis-ci.org/choefele/AlexaSkillsKit)
 
