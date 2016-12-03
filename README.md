@@ -15,7 +15,7 @@ It's early days – expect API changes until we reach 1.0!
 
 Start with implementing the `RequestHandler` protocol. AlexaSkillsKit parses requests from Alexa and passes the data on to methods required by this protocol. For example, a [launch request](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-standard-request-types-reference#launchrequest) would result in AlexaSkillsKit calling the `handleLaunch()` method.
 
-```
+```Swift
 import Foundation
 import AlexaSkillsKit
 
@@ -59,7 +59,7 @@ A sample for a custom skill using Lambda and an HTTP server is provided in the [
 
 For Lambda, you need to create an executable that takes input from `stdin` and writes output to `stdout`. This can be done with the following code:
 
-```
+```Swift
 import Foundation
 import AlexaSkillsKit
 import AlexaSkill
@@ -100,7 +100,7 @@ Now you can test the skill in the Alexa Console using the utterance "test swift"
 
 Invocation of a `RequestHandler` as part of a Swift server is done via Amazon's HTTPS API where the Alexa service calls your server with a POST request. In the following code, Kitura is used as a web framework but any other web framework would work equally well:
 
-```
+```Swift
 import Foundation
 import AlexaSkillsKit
 import AlexaSkill
