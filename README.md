@@ -81,7 +81,7 @@ In combination with a Node.js wrapper script that calls your Swift executable, t
 
 ### Stand-Alone Server
 
-Invocation of a `RequestHandler` as part of a Swift server is done via Amazon's HTTPS API where the Alexa service calls your server with a POST request. In the following code, Kitura is used as a web framework but any other web framework would work equally well:
+Invocation of a `RequestHandler` as part of a Swift server is done via Amazon's HTTPS API where the Alexa service calls your server with a POST request. In the following code, [Kitura](https://github.com/IBM-Swift/Kitura) is used as a web framework but any other web framework would work equally well:
 
 ```Swift
 import Foundation
