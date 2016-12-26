@@ -13,6 +13,10 @@ A sample project using AlexaSkillsKit can be found in the [swift-lambda-app](htt
 
 It's early days – expect API changes until we reach 1.0!
 
+## Published Skills using AlexaSkillsKit
+
+[Music Charts](https://github.com/choefele/MusicChartsSkill) (DE: Musikcharts) is a skill to get to know the most popular songs on Spotify and is published in the US, UK and DE skill stores.
+
 ## Implementing a Custom Alexa Skill
 
 Start with implementing the `RequestHandler` protocol. AlexaSkillsKit parses requests from Alexa and passes the data on to methods required by this protocol. For example, a [launch request](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-standard-request-types-reference#launchrequest) would result in AlexaSkillsKit calling the `handleLaunch()` method.
