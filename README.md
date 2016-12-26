@@ -9,7 +9,7 @@ AlexaSkillsKit is a Swift library that allows you to develop custom skills for [
 
 AlexaSkillsKit has been inspired by [alexa-app](https://github.com/matt-kruse/alexa-app), [SwiftOnLambda](https://github.com/algal/SwiftOnLambda) and [alexa-skills-kit-java](https://github.com/amzn/alexa-skills-kit-java).
 
-A sample project using AlexaSkillsKit can be found in the [swift-lambda-app](https://github.com/choefele/swift-lambda-app) repo. This project also comes with a detailed description on how to deploy your custom skill.
+A sample project using AlexaSkillsKit can be found in the [swift-lambda-app](https://github.com/choefele/swift-lambda-app) repo. This project also comes with a detailed description on how to deploy your custom skill. My article [Building Alexa Skills in Swift](https://medium.com/@claushoefele/building-alexa-skills-in-swift-3d596aa0ee95#.nainfep5c) contains a step-by-step introduction to using AlexaSkillsKit and publishing your own Alexa Skill.
 
 It's early days – expect API changes until we reach 1.0!
 
