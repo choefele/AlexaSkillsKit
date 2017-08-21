@@ -11,7 +11,7 @@ private func createFilePath(for fileName: String) -> URL {
 private func createDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) -> Date {
     let components = DateComponents(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
     var gregorian = Calendar(identifier: .gregorian)
-    gregorian.timeZone = TimeZone(abbreviation: "UTC")!
+    gregorian.timeZone = TimeZone(secondsFromGMT: 0)!
     let date = gregorian.date(from: components)
     return date!
 }
