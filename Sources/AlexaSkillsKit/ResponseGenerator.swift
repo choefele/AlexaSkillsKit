@@ -18,15 +18,6 @@ public extension ResponseGenerator {
     
     public func generateJSON(options: JSONSerialization.WritingOptions = []) throws -> Data {
         let data = try JSONSerialization.data(withJSONObject: generateJSONObject(), options: options)
-        
-        // JSONSerialization bug with Bools: https://bugs.swift.org/browse/SR-3013
-        var dataString = String(data: data, encoding: .utf8)
-        if options.contains(.prettyPrinted) {
-            dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\": 0", with: "\"shouldEndSession\" : false")
-        } else {
-            dataString = dataString?.replacingOccurrences(of: "\"shouldEndSession\":0", with: "\"shouldEndSession\":false")
-        }
-        
-        return dataString?.data(using: .utf8) ?? data
+        return data
     }
 }

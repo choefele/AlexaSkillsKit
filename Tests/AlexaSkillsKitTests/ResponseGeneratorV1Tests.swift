@@ -154,7 +154,11 @@ class ResponseGeneratorV1Tests: XCTestCase {
         if true {
             let jsonData = try? generator.generateJSON(options: .prettyPrinted)
             let jsonString = jsonData.flatMap { String(data: $0, encoding: .utf8) }
-            XCTAssertTrue(jsonString?.contains("\"shouldEndSession\" : false") == true)
+            #if os(Linux)
+                XCTAssertTrue(jsonString?.contains("\"shouldEndSession\": false") == true)
+            #else
+                XCTAssertTrue(jsonString?.contains("\"shouldEndSession\" : false") == true)
+            #endif
         }
     }
 }
